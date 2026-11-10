@@ -160,6 +160,22 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
 .motolist li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .motolist li span{min-width:0}
 .motolist li b{font-family:var(--mono);font-weight:500;margin-right:8px}
+.wx{display:flex;gap:12px;align-items:center}
+.wx svg{width:40px;height:40px;flex:none;stroke:var(--accent);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.wx b{font-family:var(--mono);font-size:1.25rem}
+.wxrow{display:flex;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--muted);margin-top:8px}
+.wxrow span b{font-family:var(--mono);font-weight:500;color:var(--ink);font-size:.9rem}
+.tips{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.tips li{font-size:.86rem;padding-left:12px;border-left:3px solid var(--easy)}
+.tips li.w2{border-color:var(--gold)} .tips li.w3{border-color:var(--hard)}
+.wxchip{font-family:var(--mono);font-size:.72rem;color:var(--muted);white-space:nowrap;display:inline-flex;align-items:center;gap:4px;padding:3px 6px}
+.wxchip.w2{color:var(--gold)} .wxchip.w3{color:var(--hard);font-weight:600}
+.results{list-style:none;margin:0;padding:0}
+.results button{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 0;font:inherit;color:var(--ink);cursor:pointer}
+.results small{color:var(--muted)}
+.place{display:flex;flex-direction:column;gap:8px}
+.place .row{display:flex;gap:8px}
+.place .row input{flex:1;min-width:0}
 .saved{font-size:.78rem;color:var(--easy);min-height:1.2em;margin:0}
 @media (max-width:520px){.motoadd{grid-template-columns:1fr}.day-body{padding-left:12px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -205,7 +221,7 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
   <!-- AJUSTES -->
   <section class="view" id="v-ajustes" hidden>
     <div><p class="eyebrow">Ajustes</p><h2>Tus datos</h2><p class="muted">Todo se guarda en este teléfono y el plan se recalcula al instante.</p></div>
-    <div class="stick"><div class="seg" role="tablist" data-seg="ajustes"><button data-p="carrera" aria-selected="true">Carrera</button><button data-p="tu">Tú</button><button data-p="gim">Gimnasio</button><button data-p="moto">Moto</button><button data-p="cal">Calendario</button></div></div>
+    <div class="stick"><div class="seg" role="tablist" data-seg="ajustes"><button data-p="carrera" aria-selected="true">Carrera</button><button data-p="tu">Tú</button><button data-p="gim">Gimnasio</button><button data-p="moto">Moto</button><button data-p="clima">Clima</button><button data-p="cal">Calendario</button></div></div>
     <form id="f" autocomplete="off">
       <div data-pane="ajustes:carrera" class="panel form">
         <label>Fecha de la carrera<input type="date" id="raceDate" required></label>
@@ -228,6 +244,19 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
       <div data-pane="ajustes:gim" class="panel" hidden style="display:flex;flex-direction:column;gap:12px">
         <div class="gymgrid" id="gymRow"></div>
         <label class="form" style="display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted);max-width:220px">Duración por sesión (min)<input type="number" id="gymMin" min="20" max="180" step="5" inputmode="numeric"></label>
+      </div>
+      <div data-pane="ajustes:clima" class="panel" hidden style="display:flex;flex-direction:column;gap:16px">
+        <p class="muted">El pronóstico viene de Open-Meteo y cubre hasta 16 días. Se actualiza cada hora cuando abres la app con internet.</p>
+        <div class="place"><p class="eyebrow">Dónde entrenas</p><p id="wxNow" style="margin:0;font-weight:600"></p>
+          <div class="row"><input type="text" id="qTrain" placeholder="Buscar ciudad"><button type="button" class="btn" data-search="train">Buscar</button></div>
+          <button type="button" class="link" id="geo" style="text-align:left">Usar mi ubicación actual</button>
+          <ul class="results" id="rTrain"></ul></div>
+        <div class="place"><p class="eyebrow">Dónde es la carrera</p><p id="wxRaceNow" style="margin:0;font-weight:600"></p>
+          <div class="row"><input type="text" id="qRace" placeholder="Buscar ciudad"><button type="button" class="btn" data-search="race">Buscar</button></div>
+          <ul class="results" id="rRace"></ul></div>
+        <input type="hidden" id="wxName"><input type="hidden" id="wxLat"><input type="hidden" id="wxLon">
+        <input type="hidden" id="rcName"><input type="hidden" id="rcLat"><input type="hidden" id="rcLon">
+        <p class="saved" id="wxMsg" style="color:var(--muted)"></p>
       </div>
       <div data-pane="ajustes:cal" class="panel" hidden style="display:flex;flex-direction:column;gap:12px">
         <p class="muted">Crea un archivo de calendario con tus sesiones para agregarlas al Calendario del iPhone. Elige a qué hora sueles entrenar.</p>
@@ -256,7 +285,7 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
       <ul class="motolist" id="motoList"></ul>
     </div>
     <p class="saved" id="saved"></p>
-    <p class="muted" style="font-size:.75rem">Versión 6 · 10 nov 2026</p>
+    <p class="muted" style="font-size:.75rem">Versión 7 · 10 nov 2026</p>
     <p class="note">Rangos generales de entrenamiento y nutrición deportiva, no una prescripción individual. La duración estimada de carrera es aproximada. Prueba la estrategia de comida en entrenamiento y, ante cualquier condición de salud, valídala con un nutricionista deportivo o médico.</p>
   </section>
 </main>
@@ -275,7 +304,7 @@ const DAYS=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 const DAYS_FULL=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 const MONTHS=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 const GYM_T={"":"Sin gimnasio",lower:"Tren inferior",upper:"Tren superior",full:"Combinado"};
-const DEF={raceDate:"2026-12-13",km:90,elev:900,terrain:"mixto",start:"09:00",goalH:"",temp:12,weight:93,ftp:"",hours:6,daysAv:"5",longDay:"6",caf:"si",gut:"no",gymMin:75,calRange:"week",calBikeT:"18:30",calLongT:"09:30",calGymT:"07:30",calBike:"si",calGym:"si",calEv:"si",calAlarm:"60",
+const DEF={raceDate:"2026-12-13",km:90,elev:900,terrain:"mixto",start:"09:00",goalH:"",temp:12,weight:93,ftp:"",hours:6,daysAv:"5",longDay:"6",caf:"si",gut:"no",gymMin:75,calRange:"week",calBikeT:"18:30",calLongT:"09:30",calGymT:"07:30",calBike:"si",calGym:"si",calEv:"si",calAlarm:"60",wxName:"Punta Arenas",wxLat:"-53.1638",wxLon:"-70.9171",rcName:"",rcLat:"",rcLon:"",
   gym1:"lower",gym2:"",gym3:"upper",gym4:"",gym5:"full",gym6:"",gym0:""};
 const FIELDS=Object.keys(DEF);
 const KEY="plan-gravel-v1";
@@ -477,7 +506,8 @@ function renderHoy(R){
     <div class="panel">${t.acts.map(actHtml).join("")}</div>
     ${t.carbs?`<div class="fuel"><div><span>Carbohidratos de hoy</span><br><b>${t.carbs[0]}–${t.carbs[1]} g</b></div><span style="text-align:right">${t.load?"Día de carga":"Proteína: "+r5(1.4*R.W)+"–"+r5(1.8*R.W)+" g"}</span></div>`:`<div class="fuel"><div><span>Hoy es la carrera</span><br><b>${R.cph[0]}–${R.cph[1]} g/h</b></div><button class="link" data-go="carrera">Ver pauta ›</button></div>`}
     ${R.warnings.map(x=>`<p class="warn">${x}</p>`).join("")}
-    ${tm?`<div class="panel"><p class="eyebrow">Mañana · ${DAYS_FULL[tm.dow]} ${fmt(tm.date)}</p><div class="tags" style="margin-top:8px">${tm.acts.map(tagHtml).join("")}</div></div>`:""}
+    ${wxCard(t)}
+    ${tm?`<div class="panel"><p class="eyebrow">Mañana · ${DAYS_FULL[tm.dow]} ${fmt(tm.date)}</p><div class="tags" style="margin-top:8px">${tm.acts.map(tagHtml).join("")}${wxChip(tm)}</div></div>`:""}
     <div class="mini">
       <div class="panel"><b>${R.daysTo}</b><span>días a la carrera</span></div>
       <div class="panel"><b>${hm(w.bikeT)}</b><span>bici esta semana</span></div>
@@ -498,7 +528,7 @@ function renderWeek(R){
   const todayIso=iso(R.today);
   $("wDays").innerHTML=w.days.map(d=>{
     const isT=iso(d.date)===todayIso,isR=d.off===0;
-    return`<details class="day ${isT?"is-today":""} ${isR?"is-race":""}" ${isT?"open":""}><summary><div class="dn">${isT?"Hoy":DAYS[d.dow]}<small>${fmt(d.date)}</small></div><div class="tags">${d.acts.map(tagHtml).join("")}</div><div class="cg">${d.carbs?d.carbs[0]+"–"+d.carbs[1]+" g":"pauta"}<span class="chev">›</span></div></summary><div class="day-body">${d.acts.map(a=>`<div><strong>${a.t}</strong><p>${a.d}</p></div>`).join("")}${d.carbs?`<p class="note">Carbohidratos del día: ${d.carbs[0]}–${d.carbs[1]} g${d.load?" (carga para la carrera)":""}.</p>`:""}</div></details>`}).join("");
+    return`<details class="day ${isT?"is-today":""} ${isR?"is-race":""}" ${isT?"open":""}><summary><div class="dn">${isT?"Hoy":DAYS[d.dow]}<small>${fmt(d.date)}</small></div><div class="tags">${d.acts.map(tagHtml).join("")}${wxChip(d)}</div><div class="cg">${d.carbs?d.carbs[0]+"–"+d.carbs[1]+" g":"pauta"}<span class="chev">›</span></div></summary><div class="day-body">${d.acts.map(a=>`<div><strong>${a.t}</strong><p>${a.d}</p></div>`).join("")}${wxBody(d)}${d.carbs?`<p class="note">Carbohidratos del día: ${d.carbs[0]}–${d.carbs[1]} g${d.load?" (carga para la carrera)":""}.</p>`:""}</div></details>`}).join("");
   const notes=[...new Set(w.notes)];
   $("wNotes").innerHTML=notes.map(x=>`<p class="note">${x}</p>`).join("");
   $("zones").innerHTML=`<table><tr><th>Zona</th><th>% FTP</th><th>Potencia</th><th>Sensación</th></tr>${zonesTxt(R.ftp).map(z=>`<tr><td>${z.n}</td><td class="n">${z.p}</td><td class="n">${z.w}</td><td>${z.d}</td></tr>`).join("")}</table>`;
@@ -536,6 +566,7 @@ function renderRace(R,v){
   const cafMg=v.caf==="si"?[r5(2*W),r5(3*W)]:[r5(1*W),r5(2*W)];
   $("raceHead").innerHTML=`<p class="eyebrow">${DAYS_FULL[R.race.getDay()]} ${fmt(R.race)}${R.daysTo>=0?` · faltan ${R.daysTo} días`:""}</p><h2>${num(v.km,90)} km gravel</h2>
     <div class="totals" style="margin-top:10px"><div><b>${hm(raceH)}${R.est?"*":""}</b><span>${R.est?"estimado":"objetivo"}</span></div><div><b>${totC[0]}–${totC[1]} g</b><span>carbohidratos</span></div><div><b>${totF[0]}–${totF[1]} L</b><span>líquido</span></div></div>
+    ${raceWxHtml(R,v)}
     ${R.est?`<p class="muted" style="margin-top:6px;font-size:.78rem">* Estimado con distancia, desnivel y terreno. Ingresa tu tiempo objetivo en Ajustes para afinarlo.</p>`:""}
     ${R.warnings.map(x=>`<p class="warn" style="margin-top:8px">${x}</p>`).join("")}`;
   const q=p=>document.querySelector(`[data-pane="carrera:${p}"]`);
@@ -549,7 +580,7 @@ function renderRace(R,v){
     ${raceH>2?`<div class="tl"><time>${at(Math.round(raceH*40))}</time><p><b>Último tercio</b><br><span>Mantén el ritmo de comida aunque cueste. Buen momento para un gel con cafeína.</span></p></div>`:""}
     <div class="tl"><time>${at(Math.round(raceH*60))}</time><p><b>Llegada</b><br><span>${r5(W)} g de carbohidratos y ${r5(0.3*W)} g de proteína en la primera hora. Rehidrata con electrolitos.</span></p></div>`;
   const last=R.days.filter(d=>d.off<=6);
-  q("semana").innerHTML=last.length?`<div class="days">${last.map(d=>`<details class="day ${d.off===0?"is-race":""}"><summary><div class="dn">${DAYS[d.dow]}<small>${d.off===0?"carrera":"−"+d.off+" d"}</small></div><div class="tags">${d.acts.map(tagHtml).join("")}</div><div class="cg">${d.carbs?d.carbs[0]+"–"+d.carbs[1]+" g":"pauta"}<span class="chev">›</span></div></summary><div class="day-body">${d.acts.map(a=>`<div><strong>${a.t}</strong><p>${a.d}</p></div>`).join("")}</div></details>`).join("")}</div>`:`<p class="muted">La semana previa aparece cuando falten 7 días o menos.</p>`;
+  q("semana").innerHTML=last.length?`<div class="days">${last.map(d=>`<details class="day ${d.off===0?"is-race":""}"><summary><div class="dn">${DAYS[d.dow]}<small>${d.off===0?"carrera":"−"+d.off+" d"}</small></div><div class="tags">${d.acts.map(tagHtml).join("")}${wxChip(d)}</div><div class="cg">${d.carbs?d.carbs[0]+"–"+d.carbs[1]+" g":"pauta"}<span class="chev">›</span></div></summary><div class="day-body">${d.acts.map(a=>`<div><strong>${a.t}</strong><p>${a.d}</p></div>`).join("")}</div></details>`).join("")}</div>`:`<p class="muted">La semana previa aparece cuando falten 7 días o menos.</p>`;
   q("check").innerHTML=`<div class="check">${CHECK.map((t,i)=>`<label><input type="checkbox" id="chk${i}" data-chk="${i}" ${checks[i]?"checked":""}><span>${t}${i===4?` (para ${totC[1]} g)`:""}</span></label>`).join("")}</div><button class="link" id="chkReset" style="margin-top:10px">Desmarcar todo</button>`;
 }
 
@@ -607,6 +638,105 @@ $("calShare").addEventListener("click",async()=>{
 function dl(f){const url=URL.createObjectURL(f.file);const a=document.createElement("a");a.href=url;a.download="plan-gravel.ics";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);calMsg(`Archivo con ${f.n} eventos generado. Ábrelo y toca "Agregar todo".`)}
 $("calDl").addEventListener("click",()=>{const f=calFile();if(f)dl(f)});
 
+/* ---------- clima (Open-Meteo) ---------- */
+const WX={};
+const WMO=c=>c===0?["Despejado","sun"]:c<=2?["Parcial","partly"]:c===3?["Nublado","cloud"]:c<=48?["Neblina","cloud"]:c<=57?["Llovizna","rain"]:c<=67?["Lluvia","rain"]:c<=77?["Nieve","snow"]:c<=82?["Chubascos","rain"]:c<=86?["Nieve","snow"]:["Tormenta","rain"];
+const WICON={sun:'<circle cx="20" cy="20" r="7"/><path d="M20 4v4M20 32v4M4 20h4M32 20h4M8.7 8.7l2.8 2.8M28.5 28.5l2.8 2.8M8.7 31.3l2.8-2.8M28.5 11.5l2.8-2.8"/>',
+  partly:'<circle cx="15" cy="15" r="5"/><path d="M15 5v2M5 15h2M8 8l1.5 1.5M22 8l-1.5 1.5"/><path d="M14 31h16a6 6 0 0 0 0-12 8 8 0 0 0-15 2 5 5 0 0 0-1 10z"/>',
+  cloud:'<path d="M11 29h18a7 7 0 0 0 0-14 9 9 0 0 0-17 3 5.5 5.5 0 0 0-1 11z"/>',
+  rain:'<path d="M11 24h18a7 7 0 0 0 0-14 9 9 0 0 0-17 3 5.5 5.5 0 0 0-1 11z"/><path d="M14 28l-2 5M21 28l-2 5M28 28l-2 5"/>',
+  snow:'<path d="M11 24h18a7 7 0 0 0 0-14 9 9 0 0 0-17 3 5.5 5.5 0 0 0-1 11z"/><path d="M14 30h.01M20 33h.01M26 30h.01"/>'};
+const CARD=["norte","noreste","este","sureste","sur","suroeste","oeste","noroeste"];
+const cardinal=deg=>CARD[Math.round(((deg%360)+360)%360/45)%8];
+function wxKey(lat,lon){return`${KEY}-wx-${(+lat).toFixed(2)},${(+lon).toFixed(2)}`}
+function wxLoadCache(lat,lon){try{const c=JSON.parse(localStorage.getItem(wxKey(lat,lon))||"null");if(c)WX[wxKey(lat,lon)]=c;return c}catch(e){return null}}
+async function wxFetch(lat,lon,force){
+  if(lat===""||lon===""||lat==null)return null;
+  const k=wxKey(lat,lon);const c=WX[k]||wxLoadCache(lat,lon);
+  if(c&&!force&&Date.now()-c.ts<3600e3)return c;
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant&hourly=temperature_2m,wind_speed_10m,wind_gusts_10m,precipitation_probability&timezone=auto&forecast_days=16&wind_speed_unit=kmh`;
+  try{const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json();const o={ts:Date.now(),daily:j.daily,hourly:j.hourly};WX[k]=o;try{localStorage.setItem(k,JSON.stringify(o))}catch(e){}return o}
+  catch(e){return c||null}
+}
+function wxDay(dateIso,lat,lon){
+  const c=WX[wxKey(lat,lon)];if(!c||!c.daily)return null;const i=c.daily.time.indexOf(dateIso);if(i<0)return null;
+  const D=c.daily;return{code:D.weather_code[i],tmax:D.temperature_2m_max[i],tmin:D.temperature_2m_min[i],rain:D.precipitation_probability_max[i],wind:D.wind_speed_10m_max[i],gust:D.wind_gusts_10m_max[i],dir:D.wind_direction_10m_dominant[i],ts:c.ts};
+}
+const trainLoc=()=>({lat:$("wxLat").value,lon:$("wxLon").value,name:$("wxName").value});
+const raceLoc=()=>$("rcLat").value!==""?{lat:$("rcLat").value,lon:$("rcLon").value,name:$("rcName").value}:trainLoc();
+const lvl=w=>!w?0:(w.gust>=70||w.wind>=50)?3:(w.gust>=50||w.wind>=30)?2:1;
+function tips(w,acts){
+  if(!w)return[];
+  const out=[],bike=acts.some(a=>["easy","hard","long","load","race"].includes(a.k)),moto=acts.some(a=>a.k==="moto");
+  if(!bike&&!moto)return w.tmax<=4?[["Día frío: si sales a caminar o movilidad, abrígate.",1]]:[];
+  const from=cardinal(w.dir);
+  if(lvl(w)===3)out.push([`Viento muy fuerte (ráfagas de ${Math.round(w.gust)} km/h): considera rodillo o una ruta protegida.${moto?" En moto, cuidado en tramos expuestos.":""}`,3]);
+  else if(lvl(w)===2&&bike)out.push([`Viento fuerte del ${from}: sal contra el viento (hacia el ${from}) y vuelve a favor.`,2]);
+  if(w.rain>=60)out.push([`Probabilidad de lluvia ${w.rain}%: cortaviento impermeable, luces y frenado anticipado en ripio.`,2]);
+  else if(w.rain>=30)out.push([`Lluvia posible (${w.rain}%): lleva cortaviento.`,1]);
+  if(w.tmax<=6)out.push(["Frío: guantes largos, cubrezapatillas y capa térmica. Bebe por horario aunque no tengas sed.",2]);
+  else if(w.tmax<=12)out.push(["Fresco: chaleco o manga larga para la primera hora.",1]);
+  if(w.tmax>=24)out.push(["Calor: apunta a la parte alta de líquido y electrolitos.",2]);
+  if(!out.length)out.push(["Buenas condiciones para entrenar afuera.",1]);
+  return out;
+}
+const tipsHtml=t=>t.length?`<ul class="tips">${t.map(([x,l])=>`<li class="w${l}">${x}</li>`).join("")}</ul>`:"";
+function wxChip(d){const L=trainLoc();const w=wxDay(iso(d.date),d.off===0?raceLoc().lat:L.lat,d.off===0?raceLoc().lon:L.lon);if(!w)return"";const l=lvl(w);return`<span class="wxchip w${l}">${Math.round(w.tmax)}° · ${Math.round(w.gust)} km/h${w.rain>=50?" · "+w.rain+"%":""}</span>`}
+function wxBody(d){const L=d.off===0?raceLoc():trainLoc();const w=wxDay(iso(d.date),L.lat,L.lon);if(!w)return"";const[lab]=WMO(w.code);return`<div><strong>Clima en ${esc(L.name||"tu zona")}: ${lab}, ${Math.round(w.tmin)}° a ${Math.round(w.tmax)}°</strong><p>Viento ${Math.round(w.wind)} km/h del ${cardinal(w.dir)}, ráfagas ${Math.round(w.gust)} km/h · lluvia ${w.rain}%</p>${tipsHtml(tips(w,d.acts))}</div>`}
+function wxCard(d){
+  const L=trainLoc();const w=wxDay(iso(d.date),L.lat,L.lon);
+  if(!w)return`<div class="panel"><p class="muted">${navigator.onLine?"Cargando el pronóstico…":"Sin conexión: el clima aparecerá cuando tengas internet."}</p></div>`;
+  const[lab,ic]=WMO(w.code);const age=Math.round((Date.now()-w.ts)/60000);
+  return`<div class="panel"><div class="wx"><svg viewBox="0 0 40 40">${WICON[ic]}</svg><div><p class="eyebrow">Clima hoy · ${esc(L.name||"tu zona")}</p><b>${Math.round(w.tmin)}° / ${Math.round(w.tmax)}°</b> <span class="muted">${lab}</span></div></div>
+  <div class="wxrow"><span>Viento <b>${Math.round(w.wind)} km/h</b> del ${cardinal(w.dir)}</span><span>Ráfagas <b>${Math.round(w.gust)} km/h</b></span><span>Lluvia <b>${w.rain}%</b></span></div>
+  ${tipsHtml(tips(w,d.acts))}<p class="muted" style="font-size:.7rem;margin-top:8px">Open-Meteo · actualizado hace ${age<60?age+" min":Math.round(age/60)+" h"}</p></div>`;
+}
+function raceForecast(v){
+  const L=raceLoc();const c=WX[wxKey(L.lat||0,L.lon||0)];if(!c||!c.hourly||!v.raceDate)return null;
+  const [sh]=(v.start||"09:00").split(":").map(Number);const {h}=estimate(v);
+  const idx=[];c.hourly.time.forEach((t,i)=>{if(t.startsWith(v.raceDate)){const hr=+t.slice(11,13);if(hr>=sh&&hr<=sh+Math.ceil(h))idx.push(i)}});
+  if(!idx.length)return null;
+  const H=c.hourly,avg=a=>a.reduce((s,x)=>s+x,0)/a.length;
+  return{temp:Math.round(avg(idx.map(i=>H.temperature_2m[i]))),tmin:Math.round(Math.min(...idx.map(i=>H.temperature_2m[i]))),tmax:Math.round(Math.max(...idx.map(i=>H.temperature_2m[i]))),wind:Math.round(Math.max(...idx.map(i=>H.wind_speed_10m[i]))),gust:Math.round(Math.max(...idx.map(i=>H.wind_gusts_10m[i]))),rain:Math.max(...idx.map(i=>H.precipitation_probability[i]??0)),name:L.name,day:wxDay(v.raceDate,L.lat,L.lon)};
+}
+function raceWxHtml(R,v){
+  const f=R.rw;const L=raceLoc();
+  if(!f)return`<p class="muted" style="margin-top:8px;font-size:.8rem">El pronóstico de ${esc(L.name||"la carrera")} aparecerá cuando falten 16 días o menos. Mientras, se usan los ${num(v.temp,12)} °C que ingresaste.</p>`;
+  const d=f.day;
+  return`<div class="panel" style="margin-top:10px"><p class="eyebrow">Pronóstico en ${esc(f.name||"la carrera")} durante la carrera</p>
+    <div class="wxrow" style="margin-top:4px"><span>Temperatura <b>${f.tmin}°–${f.tmax}°</b></span><span>Viento <b>${f.wind} km/h</b>${d?" del "+cardinal(d.dir):""}</span><span>Ráfagas <b>${f.gust} km/h</b></span><span>Lluvia <b>${f.rain}%</b></span></div>
+    ${d?tipsHtml(tips({...d,tmax:f.tmax,gust:f.gust,wind:f.wind,rain:f.rain},[{k:"race"}])):""}
+    <p class="muted" style="font-size:.72rem;margin-top:8px">El líquido por hora ya se calcula con ${f.temp} °C del pronóstico. Un pronóstico a más de 5–7 días puede cambiar bastante.</p></div>`;
+}
+function wxLabels(){const t=trainLoc(),r=raceLoc();$("wxNow").textContent=t.name||"Sin ubicación";$("wxRaceNow").textContent=$("rcLat").value!==""?r.name:`Igual que donde entrenas (${t.name||"sin ubicación"})`}
+async function wxRefresh(force){
+  const t=trainLoc(),r=raceLoc();
+  await Promise.all([wxFetch(t.lat,t.lon,force),(r.lat!==t.lat||r.lon!==t.lon)?wxFetch(r.lat,r.lon,force):null]);
+  renderAll();
+}
+async function geoSearch(q,listId,target){
+  const ul=$(listId);if(!q.trim()){ul.innerHTML="";return}
+  ul.innerHTML='<li class="muted" style="padding:8px 0">Buscando…</li>';
+  try{const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=6&language=es&format=json`);const j=await r.json();
+    const res=j.results||[];
+    ul.innerHTML=res.length?res.map(x=>`<li><button type="button" data-pick="${target}" data-lat="${x.latitude}" data-lon="${x.longitude}" data-name="${esc(x.name)}">${esc(x.name)} <small>${esc([x.admin1,x.country].filter(Boolean).join(", "))}</small></button></li>`).join(""):'<li class="muted" style="padding:8px 0">Sin resultados. Prueba con otro nombre.</li>';
+  }catch(e){ul.innerHTML='<li class="muted" style="padding:8px 0">No se pudo buscar. Revisa tu conexión.</li>'}
+}
+document.addEventListener("click",e=>{
+  const sb=e.target.closest("[data-search]");if(sb){const t=sb.dataset.search;geoSearch($(t==="train"?"qTrain":"qRace").value,t==="train"?"rTrain":"rRace",t);return}
+  const pk=e.target.closest("[data-pick]");if(pk){const pre=pk.dataset.pick==="train"?"wx":"rc";$(pre+"Name").value=pk.dataset.name;$(pre+"Lat").value=pk.dataset.lat;$(pre+"Lon").value=pk.dataset.lon;
+    $(pk.dataset.pick==="train"?"rTrain":"rRace").innerHTML="";save(read());wxLabels();$("wxMsg").textContent="Ubicación guardada. Cargando pronóstico…";wxRefresh(true).then(()=>$("wxMsg").textContent="");}
+});
+["qTrain","qRace"].forEach(id=>$(id).addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();geoSearch(e.target.value,id==="qTrain"?"rTrain":"rRace",id==="qTrain"?"train":"race")}}));
+$("geo").addEventListener("click",()=>{
+  if(!navigator.geolocation){$("wxMsg").textContent="Este navegador no permite usar la ubicación.";return}
+  $("wxMsg").textContent="Obteniendo ubicación…";
+  navigator.geolocation.getCurrentPosition(p=>{$("wxLat").value=p.coords.latitude.toFixed(4);$("wxLon").value=p.coords.longitude.toFixed(4);$("wxName").value="Mi ubicación";save(read());wxLabels();wxRefresh(true).then(()=>$("wxMsg").textContent="")},
+    ()=>{$("wxMsg").textContent="No se pudo obtener la ubicación. Revisa el permiso o busca tu ciudad."},{timeout:10000,maximumAge:3600e3});
+});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)wxRefresh(false)});
+window.addEventListener("online",()=>wxRefresh(false));
+
 function renderMotos(){
   motos.sort((a,b)=>a.date.localeCompare(b.date));
   $("motoList").innerHTML=motos.length?motos.map((m,i)=>`<li><span><b>${fmt(parseD(m.date))} ${parseD(m.date).getFullYear()}</b>${esc(m.name||"Carrera de moto")}</span><button type="button" class="btn ghost" data-del="${i}">Quitar</button></li>`).join(""):`<li class="muted">Aún no hay fechas. Agrega la primera arriba.</li>`;
@@ -614,7 +744,8 @@ function renderMotos(){
 
 function renderAll(){
   const v=read();save(v);
-  const R=compute(v);S.R=R;
+  const rw=raceForecast(v);
+  const R=compute(rw?{...v,temp:rw.temp}:v);R.rw=rw;S.R=R;
   $("count").innerHTML=R.daysTo>=0?`<b>${R.daysTo}</b>días a la carrera`:`<b>—</b>sin carrera`;
   renderHoy(R);renderWeek(R);renderFood(R,v);renderRace(R,v);
 }
@@ -653,7 +784,7 @@ $("motoForm").addEventListener("submit",e=>{e.preventDefault();const d=$("motoDa
 $("motoList").addEventListener("click",e=>{const i=e.target.dataset.del;if(i===undefined)return;motos.splice(+i,1);renderMotos();renderAll()});
 window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
 
-load();renderMotos();renderAll();go(location.hash.slice(1)||"hoy");
+load();{const t=trainLoc(),r=raceLoc();wxLoadCache(t.lat,t.lon);if(r.lat!=="")wxLoadCache(r.lat,r.lon)}renderMotos();renderAll();wxLabels();wxRefresh(false);go(location.hash.slice(1)||"hoy");
 if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>{document.addEventListener("visibilitychange",()=>{if(!document.hidden)r.update().catch(()=>{})})}).catch(()=>{})});
   let reloaded=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!reloaded){reloaded=true;location.reload()}})}
 </script>
