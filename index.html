@@ -20,7 +20,7 @@
 :root{
   --bg:#eef0ee; --surface:#ffffff; --ink:#1d2427; --muted:#5d686c; --line:#d6dbd8;
   --accent:#1f5b6e; --accent-ink:#ffffff; --gold:#b8862b; --soft:#e2ebec;
-  --rest:#8a9599; --easy:#3f8a6b; --hard:#c0562f; --long:#1f5b6e; --race:#b8862b; --moto:#6d4f9c; --gym:#1d2427;
+  --rest:#8a9599; --easy:#3f8a6b; --hard:#c0562f; --long:#1f5b6e; --race:#b8862b; --moto:#6d4f9c; --gym:#1d2427; --orange:#c9741f;
   --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -30,11 +30,11 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#13181a; --surface:#1b2225; --ink:#e6ebe9; --muted:#9aa6a9; --line:#2d373a;
   --accent:#5fa9c0; --accent-ink:#0c1416; --gold:#d6a74c; --soft:#22303a;
-  --rest:#7b878b; --easy:#5fb08d; --hard:#e07a52; --long:#5fa9c0; --race:#d6a74c; --moto:#a58bd0; --gym:#e6ebe9; color-scheme:dark}}
+  --rest:#7b878b; --easy:#5fb08d; --hard:#e07a52; --long:#5fa9c0; --race:#d6a74c; --moto:#a58bd0; --gym:#e6ebe9; --orange:#e99a4a; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#13181a; --surface:#1b2225; --ink:#e6ebe9; --muted:#9aa6a9; --line:#2d373a;
   --accent:#5fa9c0; --accent-ink:#0c1416; --gold:#d6a74c; --soft:#22303a;
-  --rest:#7b878b; --easy:#5fb08d; --hard:#e07a52; --long:#5fa9c0; --race:#d6a74c; --moto:#a58bd0; --gym:#e6ebe9; color-scheme:dark}
+  --rest:#7b878b; --easy:#5fb08d; --hard:#e07a52; --long:#5fa9c0; --race:#d6a74c; --moto:#a58bd0; --gym:#e6ebe9; --orange:#e99a4a; color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
@@ -176,6 +176,48 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
 .place{display:flex;flex-direction:column;gap:8px}
 .place .row{display:flex;gap:8px}
 .place .row input{flex:1;min-width:0}
+details.day{border-left-width:4px}
+.logbox{border-top:1px dashed var(--line);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.logsum{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.86rem}
+.logsum b{font-weight:600}
+.pill{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.opts{display:flex;gap:6px;flex-wrap:wrap}
+.opts button{font:600 .84rem var(--body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 12px;cursor:pointer}
+.opts button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rpe{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.rpe button{font:500 .8rem var(--mono);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:7px 0;cursor:pointer}
+.rpe button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rpe-l{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted)}
+.inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.86rem}
+.inline input[type=number]{width:90px}
+.inline input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent)}
+.adj{display:inline-block;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--orange);margin-left:6px}
+.ci{display:flex;flex-direction:column;gap:10px}
+.ci .row{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center}
+.ci .row span{font-size:.82rem;color:var(--muted)}
+.five{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.five button{font:500 .8rem var(--mono);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:7px 0;cursor:pointer}
+.five button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.ready{display:flex;align-items:baseline;gap:10px}
+.ready b{font-family:var(--mono);font-size:1.4rem}
+.meals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.meal{border-radius:8px;padding:8px;background:var(--soft);display:flex;flex-direction:column;gap:2px;min-width:0}
+.meal span{font-size:.7rem;color:var(--muted)}
+.meal b{font-size:.84rem}
+.meal small{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.meal.A{box-shadow:inset 0 3px 0 var(--gold)} .meal.M{box-shadow:inset 0 3px 0 var(--accent)} .meal.B{box-shadow:inset 0 3px 0 var(--rest)}
+.chart svg{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font:10px var(--mono)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.kpis div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px}
+.kpis b{font-family:var(--mono);font-size:1.15rem;display:block}
+.kpis span{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.route svg{width:100%;height:auto;display:block;background:var(--soft);border-radius:10px}
+.fileb{display:inline-flex;align-items:center;justify-content:center;font:600 .9rem var(--body);background:var(--accent);color:var(--accent-ink);border-radius:8px;padding:10px 16px;cursor:pointer}
+.fileb input{position:absolute;opacity:0;width:1px;height:1px}
+.eff{font-weight:600;font-size:.8rem}
+.eff.c{color:var(--hard)} .eff.f{color:var(--easy)} .eff.l{color:var(--gold)}
+@media (max-width:420px){.meals{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .saved{font-size:.78rem;color:var(--easy);min-height:1.2em;margin:0}
 @media (max-width:520px){.motoadd{grid-template-columns:1fr}.day-body{padding-left:12px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -191,14 +233,17 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
 
   <!-- SEMANA -->
   <section class="view" id="v-semana" hidden>
-    <div class="stick"><div class="weekbar"><button class="arrow" id="wPrev" aria-label="Semana anterior">‹</button><div class="mid" id="wTitle"></div><button class="arrow" id="wNext" aria-label="Semana siguiente">›</button></div>
-    <div class="chips" id="wChips" role="tablist" aria-label="Semanas"></div></div>
+    <div class="stick"><div class="seg" role="tablist" data-seg="semana"><button data-p="plan" aria-selected="true">Plan</button><button data-p="progreso">Progreso</button></div><div id="wNav" style="display:flex;flex-direction:column;gap:10px"><div class="weekbar"><button class="arrow" id="wPrev" aria-label="Semana anterior">‹</button><div class="mid" id="wTitle"></div><button class="arrow" id="wNext" aria-label="Semana siguiente">›</button></div>
+    <div class="chips" id="wChips" role="tablist" aria-label="Semanas"></div></div></div>
+    <div data-pane="semana:plan" style="display:flex;flex-direction:column;gap:14px">
     <div class="wsum" id="wSum"></div>
     <div id="wWarn"></div>
     <div class="days" id="wDays"></div>
     <div id="wNotes"></div>
     <div class="legend"><span><i style="background:var(--easy)"></i>Bici suave</span><span><i style="background:var(--hard)"></i>Intensa</span><span><i style="background:var(--long)"></i>Larga</span><span><i style="background:var(--gym)"></i>Gimnasio</span><span><i style="background:var(--moto)"></i>Moto</span><span><i style="background:var(--gold)"></i>Carga</span><span><i style="background:var(--rest)"></i>Descanso</span></div>
     <details class="panel"><summary><h3 style="display:inline">Zonas de entrenamiento</h3></summary><div class="scroll" id="zones" style="margin-top:10px"></div></details>
+    </div>
+    <div data-pane="semana:progreso" hidden style="display:flex;flex-direction:column;gap:14px"></div>
   </section>
 
   <!-- COMIDA -->
@@ -212,16 +257,21 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
   <!-- CARRERA -->
   <section class="view" id="v-carrera" hidden>
     <div id="raceHead"></div>
-    <div class="stick"><div class="seg" role="tablist" data-seg="carrera"><button data-p="pauta" aria-selected="true">Pauta del día</button><button data-p="semana">Semana previa</button><button data-p="check">Checklist</button></div></div>
+    <div class="stick"><div class="seg" role="tablist" data-seg="carrera"><button data-p="pauta" aria-selected="true">Pauta del día</button><button data-p="semana">Semana previa</button><button data-p="ruta">Ruta y viento</button><button data-p="check">Checklist</button></div></div>
     <div data-pane="carrera:pauta" class="panel"></div>
     <div data-pane="carrera:semana" hidden></div>
     <div data-pane="carrera:check" class="panel" hidden></div>
+    <div data-pane="carrera:ruta" hidden style="display:flex;flex-direction:column;gap:14px">
+      <div class="panel" style="display:flex;flex-direction:column;gap:10px"><p class="muted">Sube el archivo GPX de la ruta (desde Strava, Komoot, RideWithGPS o el organizador). La app calcula en qué tramos tendrás viento en contra, a favor o lateral.</p>
+        <label class="fileb">Subir GPX<input type="file" id="gpxIn" accept=".gpx,application/gpx+xml,text/xml,application/xml"></label><p class="saved" id="gpxMsg" style="color:var(--muted)"></p></div>
+      <div id="routeOut"></div>
+    </div>
   </section>
 
   <!-- AJUSTES -->
   <section class="view" id="v-ajustes" hidden>
     <div><p class="eyebrow">Ajustes</p><h2>Tus datos</h2><p class="muted">Todo se guarda en este teléfono y el plan se recalcula al instante.</p></div>
-    <div class="stick"><div class="seg" role="tablist" data-seg="ajustes"><button data-p="carrera" aria-selected="true">Carrera</button><button data-p="tu">Tú</button><button data-p="gim">Gimnasio</button><button data-p="moto">Moto</button><button data-p="clima">Clima</button><button data-p="cal">Calendario</button></div></div>
+    <div class="stick"><div class="seg" role="tablist" data-seg="ajustes"><button data-p="carrera" aria-selected="true">Carrera</button><button data-p="tu">Tú</button><button data-p="gim">Gimnasio</button><button data-p="moto">Moto</button><button data-p="clima">Clima</button><button data-p="cal">Calendario</button><button data-p="resp">Respaldo</button></div></div>
     <form id="f" autocomplete="off">
       <div data-pane="ajustes:carrera" class="panel form">
         <label>Fecha de la carrera<input type="date" id="raceDate" required></label>
@@ -275,6 +325,12 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
         <p class="note">Si exportas otra vez después de cambiar el plan, borra antes los eventos anteriores para no duplicarlos. Los eventos se identifican con "Plan Gravel" en el título para encontrarlos fácil.</p>
       </div>
     </form>
+    <div data-pane="ajustes:resp" class="panel" hidden style="display:flex;flex-direction:column;gap:12px">
+      <p class="muted">Tus datos viven solo en este teléfono. Guarda un respaldo de vez en cuando, sobre todo antes de cambiar de teléfono o borrar datos del navegador.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn" id="bkExport">Guardar respaldo</button><label class="fileb" style="background:transparent;color:var(--ink);border:1px solid var(--line)">Restaurar respaldo<input type="file" id="bkImport" accept=".json,application/json"></label></div>
+      <div id="bkConfirm"></div>
+      <p class="saved" id="bkMsg" style="color:var(--muted)"></p>
+    </div>
     <div data-pane="ajustes:moto" class="panel" hidden style="display:flex;flex-direction:column;gap:12px">
       <p class="muted">El día antes de cada moto baja la bici y la pierna; el día después queda para recuperar.</p>
       <form id="motoForm" class="motoadd form">
@@ -285,7 +341,7 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
       <ul class="motolist" id="motoList"></ul>
     </div>
     <p class="saved" id="saved"></p>
-    <p class="muted" style="font-size:.75rem">Versión 7 · 10 nov 2026</p>
+    <p class="muted" style="font-size:.75rem">Versión 8 · 10 nov 2026</p>
     <p class="note">Rangos generales de entrenamiento y nutrición deportiva, no una prescripción individual. La duración estimada de carrera es aproximada. Prueba la estrategia de comida en entrenamiento y, ante cualquier condición de salud, valídala con un nutricionista deportivo o médico.</p>
   </section>
 </main>
@@ -309,13 +365,13 @@ const DEF={raceDate:"2026-12-13",km:90,elev:900,terrain:"mixto",start:"09:00",go
 const FIELDS=Object.keys(DEF);
 const KEY="plan-gravel-v1";
 const COL={easy:"var(--easy)",hard:"var(--hard)",long:"var(--long)",load:"var(--gold)",gym:"var(--gym)",moto:"var(--moto)",race:"var(--race)",restnote:"var(--rest)",skip:"var(--rest)"};
-let motos=[],checks={},S={weeks:[],days:[],weekIdx:0,todayIdx:0};
+let motos=[],checks={},logs={},well={},planHist={},gpx=null,firstDay=null,S={weeks:[],days:[],weekIdx:0,todayIdx:0,open:new Set(),draft:{},wdraft:{},editLog:new Set(),editWell:false};
 
 $("gymRow").innerHTML=[1,2,3,4,5,6,0].map(d=>`<label style="display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted);font-weight:500">${DAYS_FULL[d]}<select id="gym${d}">${Object.entries(GYM_T).map(([k,t])=>`<option value="${k}">${t}</option>`).join("")}</select></label>`).join("");
 
-function load(){let d={...DEF};try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s){d={...d,...s};motos=Array.isArray(s.motos)?s.motos:[];checks=s.checks||{}}}catch(e){}FIELDS.forEach(k=>{$(k).value=d[k]??""})}
+function load(){let d={...DEF};try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s){d={...d,...s};motos=Array.isArray(s.motos)?s.motos:[];checks=s.checks||{};logs=s.logs||{};well=s.well||{};planHist=s.planHist||{};gpx=s.gpx||null;firstDay=s.firstDay||null}}catch(e){}FIELDS.forEach(k=>{$(k).value=d[k]??""})}
 function read(){const v={};FIELDS.forEach(k=>v[k]=$(k).value);return v}
-function save(v){try{localStorage.setItem(KEY,JSON.stringify({...v,motos,checks}))}catch(e){}}
+function save(v){try{localStorage.setItem(KEY,JSON.stringify({...v,motos,checks,logs,well,planHist,gpx,firstDay}))}catch(e){}}
 const num=(x,d)=>{const n=parseFloat(x);return isFinite(n)?n:d};
 const r5=x=>Math.round(x/5)*5;
 const parseD=s=>{const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c)};
@@ -449,7 +505,7 @@ function compute(v){
     const {plan,missing}=template(w);
     for(let k=0;k<7;k++){
       const date=addD(w.start,k);
-      if(date<today||date>race)continue;
+      if(date>race)continue;
       const dow=date.getDay(),off=Math.round((race-date)/864e5);
       let acts=[];
       if(off===0)acts=[{k:"race",s:`Gravel ${num(v.km,90)} km`,t:`Carrera gravel · ${num(v.km,90)} km`,d:"Sigue la pauta en la sección Carrera."}];
@@ -481,31 +537,34 @@ function compute(v){
       acts.forEach(a=>{if(["easy","hard","long","load"].includes(a.k))w.bikeT+=a.dur||0;if(a.k==="gym")w.gymT+=a.dur||0});
       const isLoad=(off===1||off===2)&&raceH>=1.5;
       const c=off===0?null:carbFor(acts,isLoad);
-      const day={date,dow,off,acts,carbs:c?[r5(c[0]*W),r5(c[1]*W)]:null,week:w.i,load:isLoad};
+      const day={date,dow,off,acts,carbs:c?[r5(c[0]*W),r5(c[1]*W)]:null,week:w.i,load:isLoad,past:date<today};
       w.days.push(day);R.days.push(day);
     }
     if(missing>0&&w.phase!=="Afinamiento y carrera")w.notes.push("Con tus días de pierna en el gimnasio, esta semana tiene una sola sesión intensa de bici. Es intencional: el gimnasio ya aporta estímulo de fuerza.");
   });
   R.weeks=R.weeks.filter(w=>w.days.length);
   R.weeks.forEach((w,j)=>{w.i=j;w.days.forEach(d=>d.week=j)});
+  R.carbFor=carbFor;
   return R;
 }
 
 /* ---------- vistas ---------- */
 const tagHtml=a=>`<span class="tag"><i style="background:${COL[a.k]}"></i>${a.s||a.t}</span>`;
-const actHtml=a=>`<div class="act"><div class="bar" style="background:${COL[a.k]}"></div><div><strong>${a.t}</strong><p>${a.d}</p></div></div>`;
+const actHtml=a=>`<div class="act"><div class="bar" style="background:${COL[a.k]}"></div><div><strong>${a.t}${a.adj?'<span class="adj">Ajustado</span>':""}</strong><p>${a.d}</p></div></div>`;
 
 function renderHoy(R){
   const el=$("v-hoy");
   if(R.daysTo<0){el.innerHTML=`<div class="panel"><h2>Sin carrera próxima</h2><p class="muted">Ingresa la fecha de tu próxima carrera en Ajustes.</p></div>`;return}
-  const t=R.days[0],tm=R.days[1];
+  const ti=Math.max(0,R.days.findIndex(d=>iso(d.date)===iso(R.today)));const t=R.days[ti],tm=R.days[ti+1];
   const nextMoto=motos.map(m=>({...m,d:parseD(m.date)})).filter(m=>m.d>=R.today).sort((a,b)=>a.d-b.d)[0];
   const w=R.weeks[0];
   el.innerHTML=`
     <div class="today-head"><div><p class="eyebrow">${DAYS_FULL[t.dow]} ${fmt(t.date)}</p><h2>Hoy</h2></div><span class="phase">${R.weeks[t.week].phase}</span></div>
-    <div class="panel">${t.acts.map(actHtml).join("")}</div>
+    ${checkinHtml()}
+    <div class="panel">${t.acts.map(actHtml).join("")}${logHtml(t)}</div>
     ${t.carbs?`<div class="fuel"><div><span>Carbohidratos de hoy</span><br><b>${t.carbs[0]}–${t.carbs[1]} g</b></div><span style="text-align:right">${t.load?"Día de carga":"Proteína: "+r5(1.4*R.W)+"–"+r5(1.8*R.W)+" g"}</span></div>`:`<div class="fuel"><div><span>Hoy es la carrera</span><br><b>${R.cph[0]}–${R.cph[1]} g/h</b></div><button class="link" data-go="carrera">Ver pauta ›</button></div>`}
     ${R.warnings.map(x=>`<p class="warn">${x}</p>`).join("")}
+    ${mealsHtml(t,true)}
     ${wxCard(t)}
     ${tm?`<div class="panel"><p class="eyebrow">Mañana · ${DAYS_FULL[tm.dow]} ${fmt(tm.date)}</p><div class="tags" style="margin-top:8px">${tm.acts.map(tagHtml).join("")}${wxChip(tm)}</div></div>`:""}
     <div class="mini">
@@ -528,7 +587,8 @@ function renderWeek(R){
   const todayIso=iso(R.today);
   $("wDays").innerHTML=w.days.map(d=>{
     const isT=iso(d.date)===todayIso,isR=d.off===0;
-    return`<details class="day ${isT?"is-today":""} ${isR?"is-race":""}" ${isT?"open":""}><summary><div class="dn">${isT?"Hoy":DAYS[d.dow]}<small>${fmt(d.date)}</small></div><div class="tags">${d.acts.map(tagHtml).join("")}${wxChip(d)}</div><div class="cg">${d.carbs?d.carbs[0]+"–"+d.carbs[1]+" g":"pauta"}<span class="chev">›</span></div></summary><div class="day-body">${d.acts.map(a=>`<div><strong>${a.t}</strong><p>${a.d}</p></div>`).join("")}${wxBody(d)}${d.carbs?`<p class="note">Carbohidratos del día: ${d.carbs[0]}–${d.carbs[1]} g${d.load?" (carga para la carrera)":""}.</p>`:""}</div></details>`}).join("");
+    const col=compColor(d),di=iso(d.date),op=S.open.has(di)||(isT&&!S.open.has("x"+di));
+    return`<details class="day ${isT?"is-today":""} ${isR?"is-race":""}" data-iso="${di}" ${op?"open":""} style="${col?"border-left-color:"+col:""}${d.past?";opacity:.85":""}"><summary><div class="dn">${isT?"Hoy":DAYS[d.dow]}<small>${fmt(d.date)}</small></div><div class="tags">${d.acts.map(tagHtml).join("")}${wxChip(d)}</div><div class="cg">${d.carbs?d.carbs[0]+"–"+d.carbs[1]+" g":"pauta"}<span class="chev">›</span></div></summary><div class="day-body">${d.acts.map(a=>`<div><strong>${a.t}${a.adj?'<span class="adj">Ajustado</span>':""}</strong><p>${a.d}</p></div>`).join("")}${d.past?"":wxBody(d)}${d.carbs?`<p class="note">Carbohidratos del día: ${d.carbs[0]}–${d.carbs[1]} g${d.load?" (carga para la carrera)":""}.</p>`:""}${d.past?"":mealsHtml(d,false)}${logHtml(d)}</div></details>`}).join("");
   const notes=[...new Set(w.notes)];
   $("wNotes").innerHTML=notes.map(x=>`<p class="note">${x}</p>`).join("");
   $("zones").innerHTML=`<table><tr><th>Zona</th><th>% FTP</th><th>Potencia</th><th>Sensación</th></tr>${zonesTxt(R.ftp).map(z=>`<tr><td>${z.n}</td><td class="n">${z.p}</td><td class="n">${z.w}</td><td>${z.d}</td></tr>`).join("")}</table>`;
@@ -653,8 +713,8 @@ function wxLoadCache(lat,lon){try{const c=JSON.parse(localStorage.getItem(wxKey(
 async function wxFetch(lat,lon,force){
   if(lat===""||lon===""||lat==null)return null;
   const k=wxKey(lat,lon);const c=WX[k]||wxLoadCache(lat,lon);
-  if(c&&!force&&Date.now()-c.ts<3600e3)return c;
-  const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant&hourly=temperature_2m,wind_speed_10m,wind_gusts_10m,precipitation_probability&timezone=auto&forecast_days=16&wind_speed_unit=kmh`;
+  if(c&&!force&&Date.now()-c.ts<3600e3&&c.hourly&&c.hourly.wind_direction_10m)return c;
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant&hourly=temperature_2m,wind_speed_10m,wind_gusts_10m,wind_direction_10m,precipitation_probability&timezone=auto&forecast_days=16&wind_speed_unit=kmh`;
   try{const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json();const o={ts:Date.now(),daily:j.daily,hourly:j.hourly};WX[k]=o;try{localStorage.setItem(k,JSON.stringify(o))}catch(e){}return o}
   catch(e){return c||null}
 }
@@ -737,6 +797,284 @@ $("geo").addEventListener("click",()=>{
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)wxRefresh(false)});
 window.addEventListener("online",()=>wxRefresh(false));
 
+/* ---------- registro de sesiones ---------- */
+const TRAIN_K=["easy","hard","long","load","gym"];
+const planMin=d=>Math.round(d.acts.filter(a=>TRAIN_K.includes(a.k)).reduce((s,a)=>s+(a.dur||0),0)*60);
+const STATUS={done:"Hecha",partial:"Parcial",skip:"No la hice"};
+function compColor(d){
+  const L=logs[iso(d.date)];if(!L)return d.past&&planMin(d)>0&&firstDay&&iso(d.date)>=firstDay?"var(--line)":null;
+  if(L.status==="skip")return"var(--hard)";
+  const p=L.planMin||planMin(d);if(!p)return"var(--easy)";
+  const r=(L.min||0)/p;
+  if(r>=0.8&&r<=1.2)return"var(--easy)";
+  if(r>=0.5&&r<=1.5)return"var(--gold)";
+  return"var(--orange)";
+}
+function logHtml(d){
+  const di=iso(d.date),pm=planMin(d);
+  if(d.date>S.R.today||pm===0||d.off===0)return"";
+  const L=logs[di];
+  if(L&&!S.editLog.has(di)){
+    const col=compColor(d);
+    return`<div class="logbox"><div class="logsum"><span><i class="pill" style="background:${col}"></i><b>${STATUS[L.status]}</b>${L.status!=="skip"?` · ${L.min} de ${L.planMin||pm} min · esfuerzo ${L.rpe}/10${L.legs?" · piernas cargadas":""}`:""}</span><button type="button" class="btn ghost" data-logedit="${di}">Editar</button></div></div>`;
+  }
+  const dr=S.draft[di]||(L?{...L}:{});
+  const st=dr.status;
+  return`<div class="logbox" data-logbox="${di}"><p class="eyebrow">${d.past?"¿Cómo te fue?":"Al terminar, registra cómo te fue"}</p>
+    <div class="opts">${Object.entries(STATUS).map(([k,t])=>`<button type="button" data-lst="${k}" data-d="${di}" aria-pressed="${st===k}">${t}</button>`).join("")}</div>
+    ${st&&st!=="skip"?`<div class="rpe">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button type="button" data-rpe="${n}" data-d="${di}" aria-pressed="${dr.rpe===n}">${n}</button>`).join("")}</div>
+    <div class="rpe-l"><span>1 muy fácil</span><span>10 máximo</span></div>
+    <div class="inline"><label class="inline">Minutos<input type="number" class="lmin" name="lmin-${di}" min="0" max="600" step="5" inputmode="numeric" value="${dr.min??pm}"></label>
+    <label class="inline"><input type="checkbox" class="llegs" name="llegs-${di}" ${dr.legs?"checked":""}>Piernas cargadas</label></div>
+    <div style="display:flex;gap:8px"><button type="button" class="btn" data-lsave="${di}">Guardar</button>${L?`<button type="button" class="btn ghost" data-ldel="${di}">Borrar registro</button>`:""}</div>`:""}
+  </div>`;
+}
+
+/* ---------- check-in matinal ---------- */
+const readiness=w=>w?(w.sleep+w.energy+w.sore)/3:null;
+function readyMsg(r){return r<2.5?["Baja la carga hoy: la intensidad pasó a Z2 y la salida larga se acortó.","var(--hard)"]:r<3.5?["Sigue el plan con control. Si en el calentamiento no te sientes bien, cambia a Z2.","var(--gold)"]:["Listo para el plan de hoy.","var(--easy)"]}
+function checkinHtml(){
+  const ti=iso(S.R.today),W=well[ti];
+  if(W&&!S.editWell){const r=readiness(W),[m,c]=readyMsg(r);
+    return`<div class="panel"><div class="logsum"><div><p class="eyebrow">Check-in de hoy</p><div class="ready"><b style="color:${c}">${r.toFixed(1).replace(".",",")}</b><span class="muted">de 5</span></div></div><button type="button" class="btn ghost" data-weditt="1">Editar</button></div><p class="muted" style="margin-top:6px">${m}</p></div>`}
+  const d=S.wdraft;
+  const row=(k,lab,lo,hi)=>`<div class="row"><span>${lab}</span><div><div class="five">${[1,2,3,4,5].map(n=>`<button type="button" data-wk="${k}" data-wv="${n}" aria-pressed="${d[k]===n}">${n}</button>`).join("")}</div><div class="rpe-l"><span>${lo}</span><span>${hi}</span></div></div></div>`;
+  const ready=d.sleep&&d.energy&&d.sore;
+  return`<div class="panel ci"><div><p class="eyebrow">Check-in de la mañana</p><p class="muted">Tres toques. Si vienes cansado, la app ajusta el día.</p></div>
+    ${row("sleep","Sueño","muy mal","excelente")}${row("energy","Energía","agotado","fresco")}${row("sore","Dolor muscular","mucho","nada")}
+    <button type="button" class="btn" data-wsave="1" ${ready?"":"disabled style=\"opacity:.5\""}>Guardar check-in</button></div>`;
+}
+
+/* ---------- ajuste automático ---------- */
+function adapt(R){
+  const ti=iso(R.today),z2=`Z2 continuo (${zone("Z2",R.ftp)})`;
+  const toEasy=(a,why)=>({...a,k:"easy",s:`Z2 ${hm(a.dur)}`,t:`Resistencia bici · ${hm(a.dur)}`,d:`${z2}. ${why}`,adj:1});
+  R.days.forEach(d=>{
+    if(d.past||d.off===0)return;
+    const di=iso(d.date),prev=logs[iso(addD(d.date,-1))];
+    let ch=false;
+    if(prev&&prev.status!=="skip"&&(prev.rpe>=9||prev.legs)&&d.acts.some(a=>a.k==="hard")){
+      d.acts=d.acts.map(a=>a.k==="hard"?toEasy(a,`Ajustado: ayer registraste ${prev.legs?"piernas cargadas":"un esfuerzo muy alto"}, así que hoy no hay intensidad.`):a);ch=true}
+    if(di===ti&&well[ti]&&readiness(well[ti])<2.5){
+      d.acts=d.acts.map(a=>{
+        if(a.k==="hard"){ch=true;return toEasy(a,"Ajustado por tu check-in: hoy toca solo resistencia suave.")}
+        if(a.k==="long"&&!a.adj){ch=true;const nd=a.dur*0.7;return{...a,dur:nd,s:`Larga ${hm(nd)}`,t:`Salida larga corta · ${hm(nd)}`,d:`Solo Z2 (${zone("Z2",R.ftp)}), sin bloques a ritmo de carrera. Ajustado por tu check-in.`,adj:1}}
+        if(a.k==="gym"&&!/liviano|superior/i.test(a.t)){ch=true;const nd=a.dur*0.6;return{...a,dur:nd,t:`${a.t.split(" · ")[0]} liviano · ${hm(nd)}`,d:"Ajustado por tu check-in: la mitad de las series y nada al fallo.",adj:1}}
+        return a});
+    }
+    if(ch){d.carbs=(c=>[r5(c[0]*R.W),r5(c[1]*R.W)])(R.carbFor(d.acts,d.load));}
+  });
+  // salida larga omitida en los últimos 3 días -> recuperarla en un día suave cercano
+  for(let k=1;k<=3;k++){
+    const sd=addD(R.today,-k),L=logs[iso(sd)];
+    if(!L||L.status!=="skip"||!(L.kinds||[]).includes("long"))continue;
+    const lowToday=well[iso(R.today)]&&readiness(well[iso(R.today)])<2.5;
+    const cand=R.days.find(d=>!d.past&&!(lowToday&&iso(d.date)===iso(R.today))&&d.date<=addD(sd,4)&&d.off>6&&d.acts.some(a=>a.k==="easy")&&!d.acts.some(a=>["long","hard","moto"].includes(a.k)));
+    if(!cand)continue;
+    const next=R.days.find(x=>iso(x.date)===iso(addD(cand.date,1)));
+    if(next&&next.acts.some(a=>["hard","long","moto"].includes(a.k)))continue;
+    const dur=Math.min(L.longDur||2,2.5);
+    cand.acts=cand.acts.map(a=>a.k==="easy"?{...a,k:"long",dur,s:`Larga ${hm(dur)}`,t:`Salida larga recuperada · ${hm(dur)}`,d:`Recupera la salida larga que no hiciste el ${DAYS_FULL[sd.getDay()].toLowerCase()} ${fmt(sd)}. Z2 (${zone("Z2",R.ftp)}) y practica la comida de carrera.`,adj:1}:a);
+    cand.carbs=(c=>[r5(c[0]*R.W),r5(c[1]*R.W)])(R.carbFor(cand.acts,cand.load));
+    break;
+  }
+  R.weeks.forEach(w=>{w.bikeT=0;w.gymT=0;w.days.forEach(d=>d.acts.forEach(a=>{if(["easy","hard","long","load"].includes(a.k))w.bikeT+=a.dur||0;if(a.k==="gym")w.gymT+=a.dur||0}))});
+}
+function snapshot(R){
+  const ti=iso(R.today);if(!firstDay)firstDay=ti;
+  R.days.forEach(d=>{const di=iso(d.date);if(di<firstDay||di>ti)return;if(di<ti&&planHist[di])return;
+    const long=d.acts.find(a=>a.k==="long");planHist[di]={min:planMin(d),kinds:d.acts.map(a=>a.k),longDur:long?long.dur:0}});
+}
+function saveLog(di,obj){
+  const ph=planHist[di]||{};const d=S.R.days.find(x=>iso(x.date)===di);
+  logs[di]={...obj,planMin:ph.min??(d?planMin(d):0),kinds:ph.kinds||(d?d.acts.map(a=>a.k):[]),longDur:ph.longDur||0,ts:Date.now()};
+  delete S.draft[di];S.editLog.delete(di);save(read());renderAll();
+}
+
+/* ---------- comidas codificadas ---------- */
+const LVL={A:"Alta",M:"Media",B:"Baja"};
+function mealsFor(d){
+  if(d.off===0||!d.carbs)return null;
+  const v=read();const ks=d.acts.map(a=>a.k);
+  const main=["long","hard","moto","load","easy","gym"].find(k=>ks.includes(k)&&(k!=="load"||d.acts.find(a=>a.k==="load").dur>0));
+  const M=[{n:"Desayuno",h:8},{n:"Almuerzo",h:13.5},{n:"Once",h:17.5},{n:"Cena",h:21}];
+  let lv,pre=-1,post=-1,hint="";
+  if(d.load)lv=["A","A","A","A"],hint="Día de carga: carbohidratos altos en todas las comidas, poca fibra y grasa.";
+  else if(!main)lv=["M","M","B","B"],hint="Día sin entrenamiento: carbohidratos moderados y proteína en cada comida.";
+  else{
+    const act=d.acts.find(a=>a.k===main);
+    const t=main==="long"?v.calLongT:main==="gym"?v.calGymT:main==="moto"?"10:00":v.calBikeT;
+    const[hh,mm]=(t||"18:00").split(":").map(Number);const sh=hh+mm/60,dur=main==="moto"?4:(act.dur||1);
+    const high=["long","hard","moto"].includes(main);
+    lv=high?["M","M","M","M"]:["M","M","M","B"];
+    M.forEach((m,i)=>{if(m.h<=sh-1)pre=i});post=M.findIndex(m=>m.h>=sh+dur);
+    if(pre>=0)lv[pre]=high?"A":"M";if(post>=0)lv[post]=high?"A":"M";
+    hint=pre<0?`Entrenas temprano (${t}): come algo liviano con carbohidratos antes, como un plátano o pan con miel.`:`La comida antes y después de tu sesión de las ${t} llevan más carbohidratos.`;
+  }
+  const mid=(d.carbs[0]+d.carbs[1])/2,wt={A:3,M:2,B:1},sum=lv.reduce((s,x)=>s+wt[x],0);
+  return{list:M.map((m,i)=>({n:m.n,l:lv[i],g:r5(mid*wt[lv[i]]/sum),tag:i===pre?"antes":i===post?"después":""})),hint};
+}
+function mealsHtml(d,full){
+  const r=mealsFor(d);if(!r)return"";
+  const grid=`<div class="meals">${r.list.map(m=>`<div class="meal ${m.l}"><span>${m.n}${m.tag?" · "+m.tag:""}</span><b>${LVL[m.l]}</b><small>~${m.g} g</small></div>`).join("")}</div>`;
+  return full?`<div class="panel" style="display:flex;flex-direction:column;gap:8px"><p class="eyebrow">Comidas de hoy · carbohidratos</p>${grid}<p class="muted" style="font-size:.8rem">${r.hint} Gramos aproximados, repartidos de tu meta diaria.</p></div>`:`<div><strong>Comidas</strong>${grid}</div>`;
+}
+
+/* ---------- progreso ---------- */
+function renderProgress(){
+  const el=document.querySelector('[data-pane="semana:progreso"]');if(!S.R)return;
+  const ti=iso(S.R.today);
+  const mondayIso=di=>{const d=parseD(di);return iso(addD(d,-((d.getDay()+6)%7)))};
+  const keys=[...new Set([...Object.keys(planHist),...Object.keys(logs)])].filter(k=>k<=ti).sort();
+  if(!Object.keys(logs).length){el.innerHTML=`<div class="panel"><h3>Aún no hay registros</h3><p class="muted" style="margin-top:6px">Cuando registres tus sesiones (en Hoy o al abrir cada día en Plan), aquí verás horas planificadas contra realizadas, tu cumplimiento y la carga de cada semana.</p></div>`;return}
+  const W={};keys.forEach(k=>{const m=mondayIso(k);W[m]=W[m]||{plan:0,done:0,load:0,n:0,ok:0};const ph=planHist[k],L=logs[k];
+    if(ph)W[m].plan+=ph.min;if(L){if(L.status!=="skip"){W[m].done+=L.min||0;W[m].load+=(L.min||0)*(L.rpe||5)}if(ph&&ph.min>0){W[m].n++;if(L.status!=="skip")W[m].ok++}}});
+  const wk=Object.keys(W).sort().slice(-8),data=wk.map(k=>({k,...W[k]}));
+  const cur=data[data.length-1],tot=data.reduce((a,x)=>({plan:a.plan+x.plan,done:a.done+x.done}),{plan:0,done:0});
+  const maxH=Math.max(1,...data.map(x=>Math.max(x.plan,x.done)/60));const top=Math.ceil(maxH);
+  const Wd=340,Hh=170,pl=28,pb=22,pt=8,cw=(Wd-pl-6)/data.length,bw=Math.min(18,cw/2.6);
+  const y=h=>pt+(Hh-pt-pb)*(1-h/top);
+  let svg=`<svg viewBox="0 0 ${Wd} ${Hh}" role="img" aria-label="Horas planificadas y realizadas por semana">`;
+  for(let g=0;g<=top;g+=Math.max(1,Math.ceil(top/4))){svg+=`<line x1="${pl}" x2="${Wd-4}" y1="${y(g)}" y2="${y(g)}" stroke="var(--line)" stroke-width="1"/><text x="${pl-6}" y="${y(g)+3}" text-anchor="end">${g} h</text>`}
+  data.forEach((x,i)=>{const cx=pl+cw*i+cw/2;
+    svg+=`<rect x="${cx-bw-1}" y="${y(x.plan/60)}" width="${bw}" height="${Math.max(0,y(0)-y(x.plan/60))}" rx="2" fill="var(--soft)" stroke="var(--accent)" stroke-width="1"/>`;
+    svg+=`<rect x="${cx+1}" y="${y(x.done/60)}" width="${bw}" height="${Math.max(0,y(0)-y(x.done/60))}" rx="2" fill="var(--accent)"/>`;
+    svg+=`<text x="${cx}" y="${Hh-6}" text-anchor="middle">${fmt(parseD(x.k))}</text>`});
+  svg+="</svg>";
+  const maxL=Math.max(1,...data.map(x=>x.load));
+  let svg2=`<svg viewBox="0 0 ${Wd} 90" role="img" aria-label="Carga semanal estimada">`;
+  data.forEach((x,i)=>{const cx=pl+cw*i+cw/2,h=60*x.load/maxL;svg2+=`<rect x="${cx-bw/2}" y="${70-h}" width="${bw}" height="${h}" rx="2" fill="var(--gold)"/><text x="${cx}" y="84" text-anchor="middle">${Math.round(x.load)}</text>`});
+  svg2+="</svg>";
+  const days14=[...Array(14)].map((_,i)=>iso(addD(S.R.today,i-13)));const rs=days14.map(k=>readiness(well[k]));
+  let svg3="";if(rs.some(r=>r)){const px=i=>pl+(Wd-pl-8)*i/13,py=r=>8+52*(1-(r-1)/4);
+    const pts=rs.map((r,i)=>r?`${px(i)},${py(r)}`:null).filter(Boolean);
+    svg3=`<svg viewBox="0 0 ${Wd} 70" role="img" aria-label="Check-in de los últimos 14 días"><line x1="${pl}" x2="${Wd-4}" y1="${py(2.5)}" y2="${py(2.5)}" stroke="var(--hard)" stroke-dasharray="3 3" stroke-width="1"/><text x="${pl-6}" y="${py(5)+3}" text-anchor="end">5</text><text x="${pl-6}" y="${py(1)+3}" text-anchor="end">1</text>${pts.length>1?`<polyline points="${pts.join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2"/>`:""}${rs.map((r,i)=>r?`<circle cx="${px(i)}" cy="${py(r)}" r="${i===13?4:2.5}" fill="var(--accent)"/>`:"").join("")}</svg>`}
+  const pct=x=>x.plan?Math.round(100*x.done/x.plan)+"%":"—";
+  el.innerHTML=`<div class="kpis"><div><b>${pct(cur)}</b><span>cumplimiento semana</span></div><div><b>${hm(cur.done/60)}</b><span>realizado semana</span></div><div><b>${pct(tot)}</b><span>cumplimiento total</span></div></div>
+    <div class="panel chart"><h3>Horas por semana</h3><div class="legend" style="margin:6px 0"><span><i style="background:var(--soft);border:1px solid var(--accent)"></i>Planificado</span><span><i style="background:var(--accent)"></i>Realizado</span></div>${svg}</div>
+    <div class="panel chart"><h3>Carga estimada</h3><p class="muted" style="font-size:.78rem;margin:4px 0 6px">Minutos × esfuerzo (1–10). Es una aproximación sin datos de potencia ni pulso: úsala para comparar semanas, no como valor absoluto.</p>${svg2}</div>
+    ${svg3?`<div class="panel chart"><h3>Check-in, últimos 14 días</h3><p class="muted" style="font-size:.78rem;margin:4px 0 6px">Bajo la línea roja, la app baja la carga del día.</p>${svg3}</div>`:""}
+    <p class="note">El cumplimiento cuenta desde ${fmt(parseD(firstDay||ti))}, el primer día que usaste esta versión.</p>`;
+}
+
+/* ---------- ruta GPX y viento ---------- */
+function parseGpx(txt){
+  const doc=new DOMParser().parseFromString(txt,"application/xml");
+  if(doc.getElementsByTagName("parsererror").length)throw new Error("xml");
+  let nodes=[...doc.getElementsByTagName("trkpt")];if(!nodes.length)nodes=[...doc.getElementsByTagName("rtept")];
+  if(nodes.length<2)throw new Error("pts");
+  const raw=nodes.map(n=>{const e=n.getElementsByTagName("ele")[0];return[+n.getAttribute("lat"),+n.getAttribute("lon"),e?+e.textContent:null]}).filter(p=>isFinite(p[0])&&isFinite(p[1]));
+  const nameEl=doc.getElementsByTagName("name")[0];
+  // distancia y desnivel
+  let km=0,gain=0;const sm=raw.map((p,i)=>{if(p[2]==null)return null;const w=raw.slice(Math.max(0,i-3),i+4).filter(q=>q[2]!=null);return w.reduce((s,q)=>s+q[2],0)/w.length});
+  for(let i=1;i<raw.length;i++){km+=hav(raw[i-1],raw[i]);if(sm[i]!=null&&sm[i-1]!=null&&sm[i]>sm[i-1])gain+=sm[i]-sm[i-1]}
+  // simplificar a ~400 puntos
+  const step=Math.max(1,Math.floor(raw.length/400));const pts=raw.filter((p,i)=>i%step===0||i===raw.length-1).map(p=>[+p[0].toFixed(5),+p[1].toFixed(5)]);
+  return{name:nameEl?nameEl.textContent.trim().slice(0,60):"Ruta",pts,km:Math.round(km*10)/10,gain:Math.round(gain)};
+}
+function hav(a,b){const R=6371,t=x=>x*Math.PI/180,dl=t(b[0]-a[0]),dn=t(b[1]-a[1]);const h=Math.sin(dl/2)**2+Math.cos(t(a[0]))*Math.cos(t(b[0]))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
+function bearing(a,b){const t=x=>x*Math.PI/180;const y=Math.sin(t(b[1]-a[1]))*Math.cos(t(b[0])),x=Math.cos(t(a[0]))*Math.sin(t(b[0]))-Math.sin(t(a[0]))*Math.cos(t(b[0]))*Math.cos(t(b[1]-a[1]));return(Math.atan2(y,x)*180/Math.PI+360)%360}
+function hourlyAt(lat,lon,dateIso,hour){
+  const c=WX[wxKey(lat,lon)];if(!c||!c.hourly||!c.hourly.wind_direction_10m)return null;
+  const k=`${dateIso}T${String(Math.floor(hour)%24).padStart(2,"0")}:00`;const i=c.hourly.time.indexOf(k);if(i<0)return null;
+  return{ws:c.hourly.wind_speed_10m[i],wd:c.hourly.wind_direction_10m[i],g:c.hourly.wind_gusts_10m[i]};
+}
+function renderRoute(){
+  const out=$("routeOut");if(!out||!S.R)return;
+  if(!gpx){out.innerHTML="";return}
+  const v=read(),R=S.R;
+  const cum=[0];for(let i=1;i<gpx.pts.length;i++)cum.push(cum[i-1]+hav(gpx.pts[i-1],gpx.pts[i]));
+  const tot=cum[cum.length-1]||1;const segKm=tot>60?5:Math.max(1,Math.round(tot/12));
+  const segs=[];let s0=0;
+  for(let i=1;i<gpx.pts.length;i++){if(cum[i]-cum[s0]>=segKm||i===gpx.pts.length-1){segs.push({a:s0,b:i,k0:cum[s0],k1:cum[i]});s0=i}}
+  const [sh,sm]=(v.start||"09:00").split(":").map(Number);
+  const rl=raceLoc(),tl=trainLoc();
+  const inRange=!!hourlyAt(rl.lat,rl.lon,v.raceDate,sh);
+  const useLoc=inRange?rl:tl,useDate=inRange?v.raceDate:iso(R.today);
+  let miss=0;
+  segs.forEach(sg=>{
+    sg.br=bearing(gpx.pts[sg.a],gpx.pts[sg.b]);
+    const hr=sh+sm/60+R.raceH*((sg.k0+sg.k1)/2)/tot;sg.hr=hr;
+    const w=hourlyAt(useLoc.lat,useLoc.lon,useDate,hr);sg.w=w;
+    if(!w){miss++;sg.eff="?";return}
+    const hw=w.ws*Math.cos((w.wd-sg.br)*Math.PI/180);sg.hw=hw;
+    sg.eff=hw>w.ws*0.5?"c":hw<-w.ws*0.5?"f":"l";
+  });
+  // mapa
+  const lats=gpx.pts.map(p=>p[0]),lons=gpx.pts.map(p=>p[1]);
+  const mnA=Math.min(...lats),mxA=Math.max(...lats),mnO=Math.min(...lons),mxO=Math.max(...lons);
+  const kx=Math.cos(((mnA+mxA)/2)*Math.PI/180);const wR=(mxO-mnO)*kx||1e-6,hR=(mxA-mnA)||1e-6;
+  const VW=340,VH=Math.max(140,Math.min(300,Math.round(VW*hR/wR))),pad=14,sc=Math.min((VW-2*pad)/wR,(VH-2*pad)/hR);
+  const P=p=>[(pad+((p[1]-mnO)*kx)*sc+((VW-2*pad)-wR*sc)/2).toFixed(1),(pad+(mxA-p[0])*sc+((VH-2*pad)-hR*sc)/2).toFixed(1)];
+  const ec={c:"var(--hard)",f:"var(--easy)",l:"var(--gold)","?":"var(--rest)"};
+  let map=`<svg viewBox="0 0 ${VW} ${VH}" role="img" aria-label="Ruta coloreada según el viento">`;
+  segs.forEach(sg=>{map+=`<polyline points="${gpx.pts.slice(sg.a,sg.b+1).map(p=>P(p).join(",")).join(" ")}" fill="none" stroke="${ec[sg.eff]}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`});
+  const st=P(gpx.pts[0]),en=P(gpx.pts[gpx.pts.length-1]);
+  map+=`<circle cx="${st[0]}" cy="${st[1]}" r="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/><circle cx="${en[0]}" cy="${en[1]}" r="4" fill="var(--ink)"/>`;
+  const w0=segs.find(s=>s.w);if(w0){const to=(w0.w.wd+180)%360,cx=VW-30,cy=28,r=16,rad=(to-90)*Math.PI/180;
+    map+=`<g><circle cx="${cx}" cy="${cy}" r="20" fill="var(--surface)" stroke="var(--line)"/><line x1="${cx-r*Math.cos(rad)}" y1="${cy-r*Math.sin(rad)}" x2="${cx+r*Math.cos(rad)}" y2="${cy+r*Math.sin(rad)}" stroke="var(--ink)" stroke-width="2.5" marker-end="url(#ar)"/></g><defs><marker id="ar" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker></defs>`}
+  map+="</svg>";
+  const share=t=>Math.round(100*segs.filter(s=>s.eff===t).reduce((a,s)=>a+(s.k1-s.k0),0)/tot);
+  const fmtH=h=>`${String(Math.floor(h)%24).padStart(2,"0")}:${String(Math.round((h%1)*60)%60).padStart(2,"0")}`;
+  const EFF={c:"En contra",f:"A favor",l:"Lateral","?":"Sin dato"};
+  const worst=segs.filter(s=>s.eff==="c").sort((a,b)=>b.hw-a.hw)[0];
+  out.innerHTML=`<div class="panel" style="display:flex;flex-direction:column;gap:10px">
+    <div class="logsum"><div><p class="eyebrow">${esc(gpx.name)}</p><b>${gpx.km} km · ${gpx.gain} m de desnivel</b></div><button type="button" class="btn ghost" data-gpxdel="1">Quitar</button></div>
+    ${(Math.abs(num(v.km,0)-gpx.km)>1||Math.abs(num(v.elev,0)-gpx.gain)>50)?`<button type="button" class="btn" data-gpxuse="1">Usar ${gpx.km} km y ${gpx.gain} m en el plan</button>`:""}
+    <p class="muted" style="font-size:.78rem">El desnivel calculado desde el GPX es aproximado y puede diferir del que informa el organizador.</p></div>
+  <div class="panel route" style="display:flex;flex-direction:column;gap:10px">
+    <p class="eyebrow">${inRange?"Pronóstico del día de carrera":"Ejemplo con el pronóstico de hoy"}</p>
+    ${inRange?"":`<p class="muted" style="font-size:.82rem">El pronóstico de la carrera estará disponible cuando falten 16 días o menos. Mientras, ves cómo te afectaría el viento de hoy en ${esc(tl.name||"tu zona")} a las mismas horas.</p>`}
+    ${miss===segs.length?`<p class="muted">Sin datos de viento todavía. Abre la app con internet para cargar el pronóstico.</p>`:`${map}
+    <div class="legend"><span><i style="background:var(--hard)"></i>En contra ${share("c")}%</span><span><i style="background:var(--easy)"></i>A favor ${share("f")}%</span><span><i style="background:var(--gold)"></i>Lateral ${share("l")}%</span><span>○ largada · ● meta · flecha: hacia dónde va el viento</span></div>
+    ${worst?`<p class="note">El tramo más duro es del km ${Math.round(worst.k0)} al ${Math.round(worst.k1)}, con viento en contra cerca de las ${fmtH(worst.hr)}. Llega ahí con la comida al día, ve más agachado y no persigas ruedas que te sacan de tu ritmo.</p>`:""}
+    <div class="scroll"><table><tr><th>Km</th><th>Hora</th><th>Viento</th><th>Efecto</th></tr>${segs.map(sg=>`<tr><td class="n">${Math.round(sg.k0)}–${Math.round(sg.k1)}</td><td class="n">${fmtH(sg.hr)}</td><td class="n">${sg.w?Math.round(sg.w.ws)+" km/h · ráf. "+Math.round(sg.w.g):"—"}</td><td><span class="eff ${sg.eff}">${EFF[sg.eff]}</span></td></tr>`).join("")}</table></div>`}
+    <p class="muted" style="font-size:.74rem">Cálculo simple: compara la dirección de cada tramo con el viento pronosticado a la hora estimada de paso. No considera el reparo de cerros, árboles o edificios.</p></div>`;
+}
+$("gpxIn").addEventListener("change",e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{gpx=parseGpx(String(r.result));save(read());$("gpxMsg").textContent="";renderRoute()}catch(err){$("gpxMsg").textContent="No pude leer ese archivo. Verifica que sea un GPX con la ruta (trazado o puntos de ruta)."}e.target.value=""};
+  r.readAsText(f);
+});
+
+/* ---------- respaldo ---------- */
+$("bkExport").addEventListener("click",async()=>{
+  save(read());let data;try{data=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){data={}}
+  const body=JSON.stringify({app:"plan-gravel",version:1,exported:new Date().toISOString(),data},null,1);
+  const name=`plan-gravel-respaldo-${iso(new Date())}.json`;const file=new File([body],name,{type:"application/json"});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:"Respaldo Plan Gravel"});$("bkMsg").textContent="Elige \"Guardar en Archivos\" o envíatelo por correo para guardarlo fuera del teléfono.";return}catch(e){if(e.name==="AbortError")return}}
+  const url=URL.createObjectURL(file),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
+  $("bkMsg").textContent=`Respaldo generado: ${name}`;
+});
+let pendingImport=null;
+$("bkImport").addEventListener("change",e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{e.target.value="";try{const j=JSON.parse(String(r.result));if(j.app!=="plan-gravel"||!j.data||typeof j.data!=="object")throw 0;
+    pendingImport=j;$("bkConfirm").innerHTML=`<div class="warn" style="display:flex;flex-direction:column;gap:8px"><span>Este respaldo es del ${new Date(j.exported).toLocaleDateString("es-CL")} y reemplazará todos tus datos actuales.</span><div style="display:flex;gap:8px"><button type="button" class="btn" id="bkYes">Reemplazar</button><button type="button" class="btn ghost" id="bkNo">Cancelar</button></div></div>`}
+    catch(err){$("bkMsg").textContent="Ese archivo no es un respaldo de Plan Gravel."}};
+  r.readAsText(f);
+});
+
+/* ---------- eventos de registro, check-in y ruta ---------- */
+document.addEventListener("toggle",e=>{const d=e.target;if(!d.matches||!d.matches("details.day[data-iso]"))return;const k=d.dataset.iso;if(d.open){S.open.add(k);S.open.delete("x"+k)}else{S.open.delete(k);S.open.add("x"+k)}},true);
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;const ds=t.dataset;
+  if(ds.lst){const di=ds.d;S.draft[di]={...(S.draft[di]||logs[di]||{}),status:ds.lst};
+    if(ds.lst==="skip"){saveLog(di,{status:"skip",min:0,rpe:0,legs:false});return}renderAll();return}
+  if(ds.rpe){const di=ds.d,box=t.closest("[data-logbox]"),mi=box.querySelector(".lmin"),lg=box.querySelector(".llegs");S.draft[di]={...S.draft[di],rpe:+ds.rpe,min:mi?+mi.value:undefined,legs:lg?lg.checked:false};renderAll();return}
+  if(ds.lsave){const di=ds.lsave,dr=S.draft[di]||{},box=t.closest("[data-logbox]");if(!dr.rpe){t.textContent="Elige el esfuerzo (1–10)";return}
+    saveLog(di,{status:dr.status,rpe:dr.rpe,min:Math.max(0,+box.querySelector(".lmin").value||0),legs:box.querySelector(".llegs").checked});return}
+  if(ds.ldel){delete logs[ds.ldel];delete S.draft[ds.ldel];S.editLog.delete(ds.ldel);save(read());renderAll();return}
+  if(ds.logedit){S.editLog.add(ds.logedit);S.draft[ds.logedit]={...logs[ds.logedit]};renderAll();return}
+  if(ds.wk){S.wdraft[ds.wk]=+ds.wv;renderHoy(S.R);return}
+  if(ds.wsave){const d=S.wdraft;if(!(d.sleep&&d.energy&&d.sore))return;well[iso(S.R.today)]={sleep:d.sleep,energy:d.energy,sore:d.sore};S.editWell=false;save(read());renderAll();return}
+  if(ds.weditt){S.editWell=true;S.wdraft={...well[iso(S.R.today)]};renderHoy(S.R);return}
+  if(ds.gpxdel){gpx=null;save(read());renderRoute();return}
+  if(ds.gpxuse){$("km").value=gpx.km;$("elev").value=gpx.gain;renderAll();return}
+  if(t.id==="bkYes"&&pendingImport){try{localStorage.setItem(KEY,JSON.stringify(pendingImport.data));location.reload()}catch(err){$("bkMsg").textContent="No se pudo restaurar el respaldo."}return}
+  if(t.id==="bkNo"){pendingImport=null;$("bkConfirm").innerHTML="";return}
+});
+
 function renderMotos(){
   motos.sort((a,b)=>a.date.localeCompare(b.date));
   $("motoList").innerHTML=motos.length?motos.map((m,i)=>`<li><span><b>${fmt(parseD(m.date))} ${parseD(m.date).getFullYear()}</b>${esc(m.name||"Carrera de moto")}</span><button type="button" class="btn ghost" data-del="${i}">Quitar</button></li>`).join(""):`<li class="muted">Aún no hay fechas. Agrega la primera arriba.</li>`;
@@ -746,8 +1084,10 @@ function renderAll(){
   const v=read();save(v);
   const rw=raceForecast(v);
   const R=compute(rw?{...v,temp:rw.temp}:v);R.rw=rw;S.R=R;
+  if(R.daysTo>=0){adapt(R);snapshot(R);save(v)}
   $("count").innerHTML=R.daysTo>=0?`<b>${R.daysTo}</b>días a la carrera`:`<b>—</b>sin carrera`;
-  renderHoy(R);renderWeek(R);renderFood(R,v);renderRace(R,v);
+  renderHoy(R);renderWeek(R);renderFood(R,v);renderRace(R,v);renderRoute();
+  if(!document.querySelector('[data-pane="semana:progreso"]').hidden)renderProgress();
 }
 
 /* ---------- navegación ---------- */
@@ -764,7 +1104,8 @@ document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]");if(g){go(g.dataset.go);return}
   const s=e.target.closest(".seg button");
   if(s){const grp=s.parentElement.dataset.seg;s.parentElement.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b===s));
-    document.querySelectorAll(`[data-pane^="${grp}:"]`).forEach(p=>p.hidden=p.dataset.pane!==grp+":"+s.dataset.p);return}
+    document.querySelectorAll(`[data-pane^="${grp}:"]`).forEach(p=>p.hidden=p.dataset.pane!==grp+":"+s.dataset.p);
+    if(grp==="semana"){$("wNav").hidden=s.dataset.p!=="plan";if(s.dataset.p==="progreso")renderProgress()}return}
   const wc=e.target.closest("[data-w]");if(wc){S.weekIdx=+wc.dataset.w;renderWeek(S.R);return}
   if(e.target.id==="chkReset"){checks={};save(read());renderRace(S.R,read());return}
 });
