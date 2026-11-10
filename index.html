@@ -24,6 +24,7 @@
   --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --hdr:calc(56px + env(safe-area-inset-top,0px));
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
@@ -40,13 +41,13 @@ body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);-webkit-tex
 [hidden]{display:none!important}
 
 .top{position:fixed;top:0;left:0;right:0;z-index:20;background:var(--accent);color:var(--accent-ink);padding-top:env(safe-area-inset-top,0px)}
-.stick{position:sticky;top:var(--hdr,56px);z-index:15;background:var(--bg);display:flex;flex-direction:column;gap:10px;padding-block:10px;margin-block:-10px;box-shadow:0 8px 8px -8px rgba(0,0,0,.18)}
-.top-in{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.stick{position:sticky;top:var(--hdr);z-index:15;background:var(--bg);display:flex;flex-direction:column;gap:10px;padding-block:10px;margin-block:-10px;box-shadow:0 8px 8px -8px rgba(0,0,0,.18)}
+.top-in{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));height:56px;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .brand{font-family:var(--display);font-weight:800;font-size:1.5rem;text-transform:uppercase;letter-spacing:.02em;line-height:1}
 .count{font-family:var(--mono);font-size:.8rem;text-align:right;line-height:1.25}
 .count b{font-size:1.15rem;display:block}
 
-main{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(var(--hdr,56px) + 16px) calc(88px + env(safe-area-inset-bottom,0px))}
+main{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(var(--hdr) + 16px) calc(88px + env(safe-area-inset-bottom,0px))}
 .view{display:flex;flex-direction:column;gap:14px}
 h2{font-family:var(--display);font-weight:700;font-size:1.6rem;line-height:1.05;margin:0;text-transform:uppercase;letter-spacing:.02em;text-wrap:balance}
 h3{font-family:var(--display);font-weight:700;font-size:1.15rem;margin:0;letter-spacing:.02em}
@@ -581,8 +582,6 @@ $("motoForm").addEventListener("submit",e=>{e.preventDefault();const d=$("motoDa
 $("motoList").addEventListener("click",e=>{const i=e.target.dataset.del;if(i===undefined)return;motos.splice(+i,1);renderMotos();renderAll()});
 window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
 
-function setHdr(){document.documentElement.style.setProperty("--hdr",document.querySelector(".top").offsetHeight+"px")}
-setHdr();window.addEventListener("resize",setHdr);window.addEventListener("orientationchange",()=>setTimeout(setHdr,300));
 load();renderMotos();renderAll();go(location.hash.slice(1)||"hoy");
 if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
 </script>
