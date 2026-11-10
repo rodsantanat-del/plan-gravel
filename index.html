@@ -205,7 +205,7 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
   <!-- AJUSTES -->
   <section class="view" id="v-ajustes" hidden>
     <div><p class="eyebrow">Ajustes</p><h2>Tus datos</h2><p class="muted">Todo se guarda en este teléfono y el plan se recalcula al instante.</p></div>
-    <div class="stick"><div class="seg" role="tablist" data-seg="ajustes"><button data-p="carrera" aria-selected="true">Carrera</button><button data-p="tu">Tú</button><button data-p="gim">Gimnasio</button><button data-p="moto">Moto</button></div></div>
+    <div class="stick"><div class="seg" role="tablist" data-seg="ajustes"><button data-p="carrera" aria-selected="true">Carrera</button><button data-p="tu">Tú</button><button data-p="gim">Gimnasio</button><button data-p="moto">Moto</button><button data-p="cal">Calendario</button></div></div>
     <form id="f" autocomplete="off">
       <div data-pane="ajustes:carrera" class="panel form">
         <label>Fecha de la carrera<input type="date" id="raceDate" required></label>
@@ -229,6 +229,22 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
         <div class="gymgrid" id="gymRow"></div>
         <label class="form" style="display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted);max-width:220px">Duración por sesión (min)<input type="number" id="gymMin" min="20" max="180" step="5" inputmode="numeric"></label>
       </div>
+      <div data-pane="ajustes:cal" class="panel" hidden style="display:flex;flex-direction:column;gap:12px">
+        <p class="muted">Crea un archivo de calendario con tus sesiones para agregarlas al Calendario del iPhone. Elige a qué hora sueles entrenar.</p>
+        <div class="form">
+          <label>Qué exportar<select id="calRange"><option value="week">Próximos 7 días</option><option value="all">Todo el plan hasta la carrera</option></select></label>
+          <label>Hora de bici (semana)<input type="time" id="calBikeT"></label>
+          <label>Hora de salida larga<input type="time" id="calLongT"></label>
+          <label>Hora de gimnasio<input type="time" id="calGymT"></label>
+          <label>Incluir bici<select id="calBike"><option value="si">Sí</option><option value="no">No</option></select></label>
+          <label>Incluir gimnasio<select id="calGym"><option value="si">Sí</option><option value="no">No</option></select></label>
+          <label>Incluir moto y carrera<select id="calEv"><option value="si">Sí</option><option value="no">No</option></select></label>
+          <label>Aviso<select id="calAlarm"><option value="0">Sin aviso</option><option value="30">30 min antes</option><option value="60">1 h antes</option><option value="1440">1 día antes</option></select></label>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn" id="calShare">Agregar al calendario</button><button type="button" class="btn ghost" id="calDl" style="padding:10px 14px;font-size:.9rem">Descargar archivo .ics</button></div>
+        <p class="saved" id="calMsg" style="color:var(--muted)"></p>
+        <p class="note">Si exportas otra vez después de cambiar el plan, borra antes los eventos anteriores para no duplicarlos. Los eventos se identifican con "Plan Gravel" en el título para encontrarlos fácil.</p>
+      </div>
     </form>
     <div data-pane="ajustes:moto" class="panel" hidden style="display:flex;flex-direction:column;gap:12px">
       <p class="muted">El día antes de cada moto baja la bici y la pierna; el día después queda para recuperar.</p>
@@ -240,7 +256,7 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
       <ul class="motolist" id="motoList"></ul>
     </div>
     <p class="saved" id="saved"></p>
-    <p class="muted" style="font-size:.75rem">Versión 5 · 10 nov 2026</p>
+    <p class="muted" style="font-size:.75rem">Versión 6 · 10 nov 2026</p>
     <p class="note">Rangos generales de entrenamiento y nutrición deportiva, no una prescripción individual. La duración estimada de carrera es aproximada. Prueba la estrategia de comida en entrenamiento y, ante cualquier condición de salud, valídala con un nutricionista deportivo o médico.</p>
   </section>
 </main>
@@ -259,7 +275,7 @@ const DAYS=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 const DAYS_FULL=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 const MONTHS=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 const GYM_T={"":"Sin gimnasio",lower:"Tren inferior",upper:"Tren superior",full:"Combinado"};
-const DEF={raceDate:"2026-12-13",km:90,elev:900,terrain:"mixto",start:"09:00",goalH:"",temp:12,weight:93,ftp:"",hours:6,daysAv:"5",longDay:"6",caf:"si",gut:"no",gymMin:75,
+const DEF={raceDate:"2026-12-13",km:90,elev:900,terrain:"mixto",start:"09:00",goalH:"",temp:12,weight:93,ftp:"",hours:6,daysAv:"5",longDay:"6",caf:"si",gut:"no",gymMin:75,calRange:"week",calBikeT:"18:30",calLongT:"09:30",calGymT:"07:30",calBike:"si",calGym:"si",calEv:"si",calAlarm:"60",
   gym1:"lower",gym2:"",gym3:"upper",gym4:"",gym5:"full",gym6:"",gym0:""};
 const FIELDS=Object.keys(DEF);
 const KEY="plan-gravel-v1";
@@ -536,6 +552,60 @@ function renderRace(R,v){
   q("semana").innerHTML=last.length?`<div class="days">${last.map(d=>`<details class="day ${d.off===0?"is-race":""}"><summary><div class="dn">${DAYS[d.dow]}<small>${d.off===0?"carrera":"−"+d.off+" d"}</small></div><div class="tags">${d.acts.map(tagHtml).join("")}</div><div class="cg">${d.carbs?d.carbs[0]+"–"+d.carbs[1]+" g":"pauta"}<span class="chev">›</span></div></summary><div class="day-body">${d.acts.map(a=>`<div><strong>${a.t}</strong><p>${a.d}</p></div>`).join("")}</div></details>`).join("")}</div>`:`<p class="muted">La semana previa aparece cuando falten 7 días o menos.</p>`;
   q("check").innerHTML=`<div class="check">${CHECK.map((t,i)=>`<label><input type="checkbox" id="chk${i}" data-chk="${i}" ${checks[i]?"checked":""}><span>${t}${i===4?` (para ${totC[1]} g)`:""}</span></label>`).join("")}</div><button class="link" id="chkReset" style="margin-top:10px">Desmarcar todo</button>`;
 }
+
+/* ---------- calendario (.ics) ---------- */
+function icsText(){
+  const v=read(),R=S.R;if(!R||!R.days.length)return null;
+  const p2=n=>String(n).padStart(2,"0");
+  const dt=(d,hhmm,addMin=0)=>{const[h,m]=(hhmm||"08:00").split(":").map(Number);const x=new Date(d.getFullYear(),d.getMonth(),d.getDate(),h,m+addMin);return`${x.getFullYear()}${p2(x.getMonth()+1)}${p2(x.getDate())}T${p2(x.getHours())}${p2(x.getMinutes())}00`};
+  const dOnly=d=>`${d.getFullYear()}${p2(d.getMonth()+1)}${p2(d.getDate())}`;
+  const escI=t=>String(t).replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/\\/g,"\\\\").replace(/;/g,"\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
+  const fold=l=>{const out=[];while(l.length>60){out.push(l.slice(0,60));l=" "+l.slice(60)}out.push(l);return out.join("\r\n")};
+  const now=new Date(),stamp=`${now.getUTCFullYear()}${p2(now.getUTCMonth()+1)}${p2(now.getUTCDate())}T${p2(now.getUTCHours())}${p2(now.getUTCMinutes())}00Z`;
+  const alarm=parseInt(v.calAlarm)||0;
+  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Plan Gravel//ES","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Plan Gravel"];
+  const ev=(uid,start,end,allDay,title,desc)=>{
+    L.push("BEGIN:VEVENT",`UID:${uid}@plan-gravel`,`DTSTAMP:${stamp}`);
+    if(allDay)L.push(`DTSTART;VALUE=DATE:${start}`,`DTEND;VALUE=DATE:${end}`);else L.push(`DTSTART:${start}`,`DTEND:${end}`);
+    L.push(fold("SUMMARY:"+escI(title)),fold("DESCRIPTION:"+escI(desc)));
+    if(alarm)L.push("BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+escI(title),`TRIGGER:-PT${alarm}M`,"END:VALARM");
+    L.push("END:VEVENT");
+  };
+  const limit=v.calRange==="all"?Infinity:7;let n=0;
+  R.days.filter((d,i)=>i<limit).forEach(d=>{
+    const key=dOnly(d.date);
+    const carbs=d.carbs?`\nCarbohidratos del día: ${d.carbs[0]}–${d.carbs[1]} g.`:"";
+    d.acts.forEach((a,j)=>{
+      const uid=`${key}-${a.k}-${j}`;
+      if(["easy","hard","long","load"].includes(a.k)){
+        if(v.calBike!=="si"||!(a.dur>0))return;
+        const t=a.k==="long"?v.calLongT:v.calBikeT;
+        ev(uid,dt(d.date,t),dt(d.date,t,Math.round(a.dur*60)),false,"Plan Gravel · "+a.t,a.d+carbs);n++;
+      }else if(a.k==="gym"){
+        if(v.calGym!=="si")return;
+        ev(uid,dt(d.date,v.calGymT),dt(d.date,v.calGymT,Math.round((a.dur||1)*60)),false,"Plan Gravel · "+a.t,a.d+carbs);n++;
+      }else if(a.k==="moto"){
+        if(v.calEv!=="si")return;
+        ev(uid,key,dOnly(addD(d.date,1)),true,"Plan Gravel · "+a.t,a.d+carbs);n++;
+      }else if(a.k==="race"){
+        if(v.calEv!=="si")return;
+        ev(uid,dt(d.date,v.start),dt(d.date,v.start,Math.round(R.raceH*60)),false,"Plan Gravel · "+a.t,`Desayuno 3 h antes. En ruta: ${R.cph[0]}–${R.cph[1]} g de carbohidratos y ${R.fl[0]}–${R.fl[1]} ml de líquido por hora.`);n++;
+      }
+    });
+  });
+  L.push("END:VCALENDAR");
+  return{text:L.join("\r\n")+"\r\n",n};
+}
+function calMsg(t){$("calMsg").textContent=t}
+function calFile(){const r=icsText();if(!r||!r.n){calMsg("No hay sesiones para exportar con estas opciones.");return null}return{file:new File([r.text],"plan-gravel.ics",{type:"text/calendar"}),n:r.n,text:r.text}}
+$("calShare").addEventListener("click",async()=>{
+  const f=calFile();if(!f)return;
+  if(navigator.canShare&&navigator.canShare({files:[f.file]})){
+    try{await navigator.share({files:[f.file],title:"Plan Gravel"});calMsg(`${f.n} eventos listos. Si no ves Calendario en el menú, usa "Guardar en Archivos" y ábrelo desde ahí.`)}catch(e){if(e.name!=="AbortError")calMsg("No se pudo abrir el menú para compartir. Usa Descargar archivo .ics.")}
+  }else{dl(f);}
+});
+function dl(f){const url=URL.createObjectURL(f.file);const a=document.createElement("a");a.href=url;a.download="plan-gravel.ics";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);calMsg(`Archivo con ${f.n} eventos generado. Ábrelo y toca "Agregar todo".`)}
+$("calDl").addEventListener("click",()=>{const f=calFile();if(f)dl(f)});
 
 function renderMotos(){
   motos.sort((a,b)=>a.date.localeCompare(b.date));
