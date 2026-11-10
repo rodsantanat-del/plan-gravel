@@ -38,15 +38,15 @@
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--accent);z-index:30}
 
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--accent);color:var(--accent-ink)}
+.top{position:fixed;top:0;left:0;right:0;z-index:20;background:var(--accent);color:var(--accent-ink);padding-top:env(safe-area-inset-top,0px)}
+.stick{position:sticky;top:var(--hdr,56px);z-index:15;background:var(--bg);display:flex;flex-direction:column;gap:10px;padding-block:10px;margin-block:-10px;box-shadow:0 8px 8px -8px rgba(0,0,0,.18)}
 .top-in{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .brand{font-family:var(--display);font-weight:800;font-size:1.5rem;text-transform:uppercase;letter-spacing:.02em;line-height:1}
 .count{font-family:var(--mono);font-size:.8rem;text-align:right;line-height:1.25}
 .count b{font-size:1.15rem;display:block}
 
-main{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px calc(88px + env(safe-area-inset-bottom,0px))}
+main{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(var(--hdr,56px) + 16px) calc(88px + env(safe-area-inset-bottom,0px))}
 .view{display:flex;flex-direction:column;gap:14px}
 h2{font-family:var(--display);font-weight:700;font-size:1.6rem;line-height:1.05;margin:0;text-transform:uppercase;letter-spacing:.02em;text-wrap:balance}
 h3{font-family:var(--display);font-weight:700;font-size:1.15rem;margin:0;letter-spacing:.02em}
@@ -174,8 +174,8 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
 
   <!-- SEMANA -->
   <section class="view" id="v-semana" hidden>
-    <div class="weekbar"><button class="arrow" id="wPrev" aria-label="Semana anterior">‹</button><div class="mid" id="wTitle"></div><button class="arrow" id="wNext" aria-label="Semana siguiente">›</button></div>
-    <div class="chips" id="wChips" role="tablist" aria-label="Semanas"></div>
+    <div class="stick"><div class="weekbar"><button class="arrow" id="wPrev" aria-label="Semana anterior">‹</button><div class="mid" id="wTitle"></div><button class="arrow" id="wNext" aria-label="Semana siguiente">›</button></div>
+    <div class="chips" id="wChips" role="tablist" aria-label="Semanas"></div></div>
     <div class="wsum" id="wSum"></div>
     <div id="wWarn"></div>
     <div class="days" id="wDays"></div>
@@ -186,7 +186,7 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
 
   <!-- COMIDA -->
   <section class="view" id="v-comida" hidden>
-    <div class="seg" role="tablist" data-seg="comida"><button data-p="base" aria-selected="true">Base diaria</button><button data-p="moto">Moto y gimnasio</button><button data-p="equiv">Equivalencias</button></div>
+    <div class="stick"><div class="seg" role="tablist" data-seg="comida"><button data-p="base" aria-selected="true">Base diaria</button><button data-p="moto">Moto y gimnasio</button><button data-p="equiv">Equivalencias</button></div></div>
     <div data-pane="comida:base"></div>
     <div data-pane="comida:moto" hidden></div>
     <div data-pane="comida:equiv" hidden></div>
@@ -195,7 +195,7 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
   <!-- CARRERA -->
   <section class="view" id="v-carrera" hidden>
     <div id="raceHead"></div>
-    <div class="seg" role="tablist" data-seg="carrera"><button data-p="pauta" aria-selected="true">Pauta del día</button><button data-p="semana">Semana previa</button><button data-p="check">Checklist</button></div>
+    <div class="stick"><div class="seg" role="tablist" data-seg="carrera"><button data-p="pauta" aria-selected="true">Pauta del día</button><button data-p="semana">Semana previa</button><button data-p="check">Checklist</button></div></div>
     <div data-pane="carrera:pauta" class="panel"></div>
     <div data-pane="carrera:semana" hidden></div>
     <div data-pane="carrera:check" class="panel" hidden></div>
@@ -204,7 +204,7 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
   <!-- AJUSTES -->
   <section class="view" id="v-ajustes" hidden>
     <div><p class="eyebrow">Ajustes</p><h2>Tus datos</h2><p class="muted">Todo se guarda en este teléfono y el plan se recalcula al instante.</p></div>
-    <div class="seg" role="tablist" data-seg="ajustes"><button data-p="carrera" aria-selected="true">Carrera</button><button data-p="tu">Tú</button><button data-p="gim">Gimnasio</button><button data-p="moto">Moto</button></div>
+    <div class="stick"><div class="seg" role="tablist" data-seg="ajustes"><button data-p="carrera" aria-selected="true">Carrera</button><button data-p="tu">Tú</button><button data-p="gim">Gimnasio</button><button data-p="moto">Moto</button></div></div>
     <form id="f" autocomplete="off">
       <div data-pane="ajustes:carrera" class="panel form">
         <label>Fecha de la carrera<input type="date" id="raceDate" required></label>
@@ -581,6 +581,8 @@ $("motoForm").addEventListener("submit",e=>{e.preventDefault();const d=$("motoDa
 $("motoList").addEventListener("click",e=>{const i=e.target.dataset.del;if(i===undefined)return;motos.splice(+i,1);renderMotos();renderAll()});
 window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
 
+function setHdr(){document.documentElement.style.setProperty("--hdr",document.querySelector(".top").offsetHeight+"px")}
+setHdr();window.addEventListener("resize",setHdr);window.addEventListener("orientationchange",()=>setTimeout(setHdr,300));
 load();renderMotos();renderAll();go(location.hash.slice(1)||"hoy");
 if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
 </script>
