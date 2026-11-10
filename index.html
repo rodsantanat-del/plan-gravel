@@ -240,6 +240,7 @@ input,select{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);b
       <ul class="motolist" id="motoList"></ul>
     </div>
     <p class="saved" id="saved"></p>
+    <p class="muted" style="font-size:.75rem">Versión 5 · 10 nov 2026</p>
     <p class="note">Rangos generales de entrenamiento y nutrición deportiva, no una prescripción individual. La duración estimada de carrera es aproximada. Prueba la estrategia de comida en entrenamiento y, ante cualquier condición de salud, valídala con un nutricionista deportivo o médico.</p>
   </section>
 </main>
@@ -583,7 +584,8 @@ $("motoList").addEventListener("click",e=>{const i=e.target.dataset.del;if(i===u
 window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
 
 load();renderMotos();renderAll();go(location.hash.slice(1)||"hoy");
-if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>{document.addEventListener("visibilitychange",()=>{if(!document.hidden)r.update().catch(()=>{})})}).catch(()=>{})});
+  let reloaded=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!reloaded){reloaded=true;location.reload()}})}
 </script>
 </body>
 </html>

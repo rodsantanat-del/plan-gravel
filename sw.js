@@ -1,5 +1,5 @@
 // Guarda la app para que funcione sin conexión. Cambia VERSION al publicar cambios.
-const VERSION = "plan-gravel-v4";
+const VERSION = "plan-gravel-v5";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -12,7 +12,7 @@ self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
   // La página: primero la red (para recibir actualizaciones), si no hay conexión, la copia guardada
   if (e.request.mode === "navigate") {
-    e.respondWith(fetch(e.request).then(r => { const cp = r.clone(); caches.open(VERSION).then(c => c.put("index.html", cp)); return r; })
+    e.respondWith(fetch(e.request,{cache:"no-store"}).then(r => { const cp = r.clone(); caches.open(VERSION).then(c => c.put("index.html", cp)); return r; })
       .catch(() => caches.match("index.html")));
     return;
   }
